@@ -15,11 +15,9 @@ public class PasswordGenerator {
         return sb.toString();
     }
 
-    // Частотный анализ символов
     public static void frequencyAnalysis(String password) {
         int[] frequencies = new int[ALPHABET_LENGTH];
 
-        // Подсчет частот символов
         for (char c : password.toCharArray()) {
             int index = CHARACTERS.indexOf(c);
             if (index >= 0) {
@@ -27,7 +25,6 @@ public class PasswordGenerator {
             }
         }
 
-        // Вывод результатов
         System.out.println("Частотный анализ символов:");
         for (int i = 0; i < ALPHABET_LENGTH; i++) {
             if (frequencies[i] > 0) {
@@ -36,10 +33,9 @@ public class PasswordGenerator {
         }
     }
 
-    // Оценка среднего времени подбора пароля (brute-force)
     public static double calculateBruteForceTime(int length) {
         double possibleCombinations = Math.pow(ALPHABET_LENGTH, length);
-        double timePerAttempt = 0.00001; // условное время на одну попытку (в секундах)
+        double timePerAttempt = 0.00001;
         return possibleCombinations * timePerAttempt;
     }
 

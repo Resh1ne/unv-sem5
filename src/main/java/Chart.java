@@ -4,6 +4,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.LogarithmicAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+
 import javax.swing.*;
 
 public class Chart extends JFrame {
@@ -25,18 +26,15 @@ public class Chart extends JFrame {
         setContentPane(chartPanel);
     }
 
-    // Функция для расчета времени подбора
     private static double calculateBruteForceTime(int length) {
         double possibleCombinations = Math.pow(ALPHABET_LENGTH, length);
-        double timePerAttempt = 0.00001; // Условное время на одну попытку (в секундах)
+        double timePerAttempt = 0.00001;
         return possibleCombinations * timePerAttempt;
     }
 
-    // Создание набора данных
     private DefaultCategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        // Диапазон длин пароля
         for (int length = 1; length <= 20; length++) {
             double bruteForceTime = calculateBruteForceTime(length);
             dataset.addValue(bruteForceTime, "Время подбора", Integer.toString(length));
@@ -45,7 +43,6 @@ public class Chart extends JFrame {
         return dataset;
     }
 
-    // Создание графика
     private JFreeChart createChart(DefaultCategoryDataset dataset) {
         return ChartFactory.createLineChart(
                 "Зависимость времени подбора пароля от его длины",  // Заголовок
@@ -60,7 +57,6 @@ public class Chart extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Запуск приложения
         SwingUtilities.invokeLater(() -> {
             Chart example = new Chart("График времени подбора пароля");
             example.setSize(800, 600);
