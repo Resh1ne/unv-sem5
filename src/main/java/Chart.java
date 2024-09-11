@@ -16,6 +16,9 @@ public class Chart extends JFrame {
         // Создание графика
         JFreeChart chart = createChart(createDataset());
 
+        // Настройка логарифмической шкалы для оси Y
+//        chart.getCategoryPlot().setRangeAxis(new LogarithmicAxis("Среднее время подбора (секунды)"));
+
         // Создание панели для графика
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
