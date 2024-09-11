@@ -27,8 +27,8 @@ public class Chart extends JFrame {
     }
 
     private static double calculateBruteForceTime(int length) {
-        double possibleCombinations = Math.pow(ALPHABET_LENGTH, length);
-        double timePerAttempt = 0.00001;
+        double possibleCombinations = Math.pow(ALPHABET_LENGTH, length) / 2;
+        double timePerAttempt = 0.000001;
         return possibleCombinations * timePerAttempt;
     }
 

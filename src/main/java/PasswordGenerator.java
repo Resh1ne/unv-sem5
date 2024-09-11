@@ -15,7 +15,7 @@ public class PasswordGenerator {
         return sb.toString();
     }
 
-    public static void frequencyAnalysis(String password) {
+    public static int[] frequencyAnalysis(String password) {
         int[] frequencies = new int[ALPHABET_LENGTH];
 
         for (char c : password.toCharArray()) {
@@ -24,7 +24,10 @@ public class PasswordGenerator {
                 frequencies[index]++;
             }
         }
+        return frequencies;
+    }
 
+    public static void displayFrequency(int[] frequencies) {
         System.out.println("Частотный анализ символов:");
         for (int i = 0; i < ALPHABET_LENGTH; i++) {
             if (frequencies[i] > 0) {
@@ -34,8 +37,8 @@ public class PasswordGenerator {
     }
 
     public static double calculateBruteForceTime(int length) {
-        double possibleCombinations = Math.pow(ALPHABET_LENGTH, length);
-        double timePerAttempt = 0.00001;
+        double possibleCombinations = Math.pow(ALPHABET_LENGTH, length) / 2;
+        double timePerAttempt = 0.000001;
         return possibleCombinations * timePerAttempt;
     }
 
@@ -48,7 +51,8 @@ public class PasswordGenerator {
         String randomString = generateRandomString(length);
         System.out.println("Сгенерированная строка: " + randomString);
 
-        frequencyAnalysis(randomString);
+        int[] frequencies = frequencyAnalysis(randomString);
+        displayFrequency(frequencies);
 
         double bruteForceTime = calculateBruteForceTime(length);
         System.out.printf("Среднее время подбора пароля: %.2f секунд\n", bruteForceTime);
