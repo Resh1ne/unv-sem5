@@ -1,6 +1,5 @@
 public class CaesarCipher {
 
-    // Метод для зашифрования текста
     public static String encrypt(String text, int shift) {
         StringBuilder result = new StringBuilder();
 
@@ -10,24 +9,21 @@ public class CaesarCipher {
                 char base = Character.isUpperCase(c) ? 'A' : 'a';
                 result.append((char) ((c - base + shift) % 26 + base));
             } else {
-                result.append(c);  // Сохраняем неалфавитные символы
+                result.append(c);
             }
         }
         return result.toString();
     }
 
-    // Метод для расшифровки текста
     public static String decrypt(String text, int shift) {
-        return encrypt(text, 26 - shift);  // Обратная операция сдвига
+        return encrypt(text, 26 - shift);
     }
 
-    // Метод для атаки полным перебором
     public static void bruteForceAttack(String encryptedText, String originalText) {
         for (int key = 0; key < 26; key++) {
             String decrypted = decrypt(encryptedText, key);
             System.out.println("Ключ: " + key + " -> " + decrypted);
 
-            // Автоматическое сравнение с исходным текстом
             if (decrypted.equals(originalText)) {
                 System.out.println("Ключ найден: " + key);
                 break;
