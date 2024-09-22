@@ -2,6 +2,6 @@ public class Main {
     public static void main(String[] args) {
 
         BrightCorrection br = new BrightCorrection();
-        br.startProcess("image1.jpg","image2.jpg");
+        br.startProcess("src\\main\\resources\\img1.jpg","src\\main\\resources\\img2.jpg");
     }
 }
