@@ -58,6 +58,6 @@ public class MedianFilter {
 
     public static void main(String[] args) {
         MedianFilter median = new MedianFilter();
-        median.startProcess("src\\main\\resources\\StartImage.png");
+        median.startProcess("src\\main\\resources\\img.png");
     }
 }
