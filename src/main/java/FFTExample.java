@@ -221,4 +221,31 @@ public class FFTExample {
             arrayData.add(value);
         }
     }
+
+    // Метод для получения частотного спектра
+    public List<Double> getAmplitudes() {
+        List<Double> amplitudes = new ArrayList<>();
+        for (Object obj : this.listOfNewData.get(0)) { // Используем первый набор данных
+            Complex complex = obj instanceof Double ? new Complex((Double) obj, 0) : (Complex) obj;
+            double amplitude = Math.sqrt(Math.pow(complex.getReal(), 2) + Math.pow(complex.getImaginary(), 2));
+            amplitudes.add(amplitude);
+        }
+        return amplitudes;
+    }
+
+    // Метод для получения списка частот
+    public List<Double> getFrequencies() {
+        List<Double> frequencies = new ArrayList<>();
+        double sampleRate = frequency; // Частота дискретизации
+        int n = this.listOfNewData.get(0).size(); // Размер данных
+        for (int i = 0; i < n; i++) {
+            double freq = i * (sampleRate / n); // Шаг частоты
+            frequencies.add(freq);
+        }
+        return frequencies;
+    }
+
+    public int getFrequency() {
+        return this.frequency;
+    }
 }
