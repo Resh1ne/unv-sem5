@@ -11,10 +11,10 @@ VALUES
 
 CREATE TABLE owner_types (
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(50)
+    owner_type VARCHAR(50)
 );
 
-INSERT INTO owner_types (name)
+INSERT INTO owner_types (owner_type)
 VALUES
     ('CITY_ORGANIZATION'),
     ('REGIONAL_ORGANIZATION'),
