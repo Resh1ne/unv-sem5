@@ -19,11 +19,27 @@ import java.util.List;
 
 public class ArtworkDaoImpl implements ArtworkDao {
     private final DataSource dataSource;
-    private static final String CREATION_QUERY = "";
-    private static final String FIND_BY_ID_QUERY = "";
-    private static final String FIND_ALL_QUERY = "";
-    private static final String UPDATE_QUERY = "";
-    private static final String DELETE_QUERY = "";
+    private static final String CREATION_QUERY = "INSERT INTO artworks " +
+            "(title, execution_id, creation_date, height, width, volume, artist_id) " +
+            "VALUES (?, (SELECT id FROM execution_types et WHERE et.execution = ?), ?, ?, ?, ?, ?)";
+    private static final String FIND_BY_ID_QUERY = "SELECT art.id, art.title, et.execution, art.creation_date, art.height, art.width, art.volume, art.artist_id " +
+            "FROM artworks art " +
+            "JOIN execution_types et ON art.execution_id = et.id " +
+            "WHERE art.id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT art.id, art.title, et.execution, art.creation_date, art.height, art.width, art.volume, art.artist_id " +
+            "FROM artworks art " +
+            "JOIN execution_types et ON art.execution_id = et.id ";
+    private static final String UPDATE_QUERY = "UPDATE artworks " +
+            "SET " +
+            "title = ?, " +
+            "execution_id = (SELECT id FROM execution_types et WHERE et.execution = ?), " +
+            "creation_date = ?, " +
+            "height = ?, " +
+            "width = ?, " +
+            "volume = ?, " +
+            "artist_id = ? " +
+            "WHERE id = ?";
+    private static final String DELETE_QUERY = "DELETE FROM artworks WHERE id = ?";
 
     public ArtworkDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -80,7 +96,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
         Artwork artwork = new Artwork();
         artwork.setId(resultSet.getLong("id"));
         artwork.setTitle(resultSet.getString("title"));
-        artwork.setExecutionType(ExecutionType.valueOf(resultSet.getString("execution_id")));
+        artwork.setExecutionType(ExecutionType.valueOf(resultSet.getString("execution")));
         artwork.setCreationDate(resultSet.getDate("creation_date").toLocalDate());
         artwork.setHeight(resultSet.getBigDecimal("height"));
         artwork.setWidth(resultSet.getBigDecimal("width"));
