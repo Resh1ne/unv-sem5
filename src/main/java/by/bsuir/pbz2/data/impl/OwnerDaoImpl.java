@@ -15,11 +15,24 @@ import java.util.List;
 
 public class OwnerDaoImpl implements OwnerDao {
     private final DataSource dataSource;
-    private static final String CREATION_QUERY = "";
-    private static final String FIND_BY_ID_QUERY = "";
-    private static final String FIND_ALL_QUERY = "";
-    private static final String UPDATE_QUERY = "";
-    private static final String DELETE_QUERY = "";
+    private static final String CREATION_QUERY = "INSERT INTO owners " +
+            "(name, address, phone, type_id) " +
+            "VALUES (?, ?, ?, (SELECT id FROM owner_types ot WHERE ot.owner_type = ?))";
+    private static final String FIND_BY_ID_QUERY = "SELECT o.id, o.name, o.address, o.phone, ot.owner_type " +
+            "FROM owners o " +
+            "JOIN owner_types ot ON o.type_id = ot.id " +
+            "WHERE o.id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT o.id, o.name, o.address, o.phone, ot.owner_type " +
+            "FROM owners o " +
+            "JOIN owner_types ot ON o.type_id = ot.id ";
+    private static final String UPDATE_QUERY = "UPDATE owners " +
+            "SET " +
+            "name = ?, " +
+            "address = ?, " +
+            "phone = ?, " +
+            "type_id = (SELECT id FROM owner_types ot WHERE ot.owner_type = ?) " +
+            "WHERE id = ?";
+    private static final String DELETE_QUERY = "DELETE FROM owners WHERE id = ?";
 
     public OwnerDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -66,7 +79,7 @@ public class OwnerDaoImpl implements OwnerDao {
         owner.setName(resultSet.getString("name"));
         owner.setAddress(resultSet.getString("address"));
         owner.setPhone(resultSet.getString("phone"));
-        owner.setOwnerType(OwnerType.valueOf(resultSet.getString("type_id")));
+        owner.setOwnerType(OwnerType.valueOf(resultSet.getString("owner_type")));
         return owner;
     }
 
