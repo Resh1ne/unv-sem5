@@ -23,9 +23,9 @@ VALUES
 
 CREATE TABLE execution_types (
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(50)
+    execution VARCHAR(50)
 );
-INSERT INTO execution_types (name)
+INSERT INTO execution_types (execution)
 VALUES
     ('PAINTING'),
     ('WATERCOLOR'),
