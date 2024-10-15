@@ -15,11 +15,22 @@ import java.util.List;
 
 public class ArtistDaoImpl implements ArtistDao {
     private final DataSource dataSource;
-    private static final String CREATION_QUERY = "";
-    private static final String FIND_BY_ID_QUERY = "";
-    private static final String FIND_ALL_QUERY = "";
-    private static final String UPDATE_QUERY = "";
-    private static final String DELETE_QUERY = "";
+    private static final String CREATION_QUERY = "INSERT INTO artists " +
+            "(name, birth_place, birth_date, biography, education) " +
+            "VALUES (?, ?, ?, ?, ?)";
+    private static final String FIND_BY_ID_QUERY = "SELECT id, name, birth_place, birth_date, biography, education " +
+            "FROM artists WHERE id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT id, name, birth_place, birth_date, biography, education " +
+            "FROM artists";
+    private static final String UPDATE_QUERY = "UPDATE artists " +
+            "SET " +
+            "name = ?, " +
+            "birth_place = ?, " +
+            "birth_date = ?, " +
+            "biography = ?, " +
+            "education = ? " +
+            "WHERE id = ?";
+    private static final String DELETE_QUERY = "DELETE FROM artists WHERE id = ?";
 
     public ArtistDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
