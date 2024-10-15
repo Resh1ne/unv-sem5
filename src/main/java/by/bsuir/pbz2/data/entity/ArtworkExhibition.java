@@ -1,26 +1,15 @@
 package by.bsuir.pbz2.data.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Objects;
 
+@Setter
+@Getter
 public class ArtworkExhibition {
     private Exhibition exhibitionId;
     private Artwork artworkId;
-
-    public Exhibition getExhibitionId() {
-        return exhibitionId;
-    }
-
-    public void setExhibitionId(Exhibition exhibitionId) {
-        this.exhibitionId = exhibitionId;
-    }
-
-    public Artwork getArtworkId() {
-        return artworkId;
-    }
-
-    public void setArtworkId(Artwork artworkId) {
-        this.artworkId = artworkId;
-    }
 
     @Override
     public boolean equals(Object o) {
