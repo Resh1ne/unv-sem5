@@ -40,7 +40,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
             setNullBigDecimal(4, entity.getHeight(), statement);
             setNullBigDecimal(5, entity.getWidth(), statement);
             setNullBigDecimal(6, entity.getVolume(), statement);
-            statement.setLong(7, entity.getArtist().getId());
+            statement.setLong(7, entity.getArtistId().getId());
             statement.executeUpdate();
             ResultSet keys = statement.getGeneratedKeys();
             if (keys.next()) {
@@ -80,14 +80,14 @@ public class ArtworkDaoImpl implements ArtworkDao {
         Artwork artwork = new Artwork();
         artwork.setId(resultSet.getLong("id"));
         artwork.setTitle(resultSet.getString("title"));
-        artwork.setExecutionType(ExecutionType.valueOf(resultSet.getString("execution_type")));
+        artwork.setExecutionType(ExecutionType.valueOf(resultSet.getString("execution_id")));
         artwork.setCreationDate(resultSet.getDate("creation_date").toLocalDate());
         artwork.setHeight(resultSet.getBigDecimal("height"));
         artwork.setWidth(resultSet.getBigDecimal("width"));
         artwork.setVolume(resultSet.getBigDecimal("volume"));
-        Long artist_id = resultSet.getLong("artist_id");
+        Long artistId = resultSet.getLong("artist_id");
         ArtistDao artistDao = new ArtistDaoImpl(this.dataSource);
-        artwork.setArtist(artistDao.findById(artist_id));
+        artwork.setArtistId(artistDao.findById(artistId));
         return artwork;
     }
 
@@ -117,7 +117,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
             setNullBigDecimal(4, entity.getHeight(), statement);
             setNullBigDecimal(5, entity.getWidth(), statement);
             setNullBigDecimal(6, entity.getVolume(), statement);
-            statement.setLong(7, entity.getArtist().getId());
+            statement.setLong(7, entity.getArtistId().getId());
             statement.setLong(8, entity.getId());
 
             int rowsAffected = statement.executeUpdate();
