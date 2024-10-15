@@ -7,13 +7,15 @@ import by.bsuir.pbz2.data.entity.Exhibition;
 import java.util.List;
 
 public interface ArtworkExhibitionDao {
-    ArtworkExhibition save(ArtworkExhibition artworkExhibition);
+    ArtworkExhibition create(ArtworkExhibition artworkExhibition);
 
     ArtworkExhibition findByArtworkId(Artwork artworkId);
 
     ArtworkExhibition findByExhibitionId(Exhibition exhibitionId);
 
     List<ArtworkExhibition> findAll();
+
+    ArtworkExhibition update(ArtworkExhibition artworkExhibition);
 
     boolean delete(ArtworkExhibition artworkExhibition);
 }
