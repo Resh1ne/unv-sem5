@@ -1,55 +1,19 @@
 package by.bsuir.pbz2.data.entity;
 
 import by.bsuir.pbz2.data.entity.enums.OwnerType;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Setter
+@Getter
 public class Owner {
     private Long id;
     private String name;
     private String address;
     private String phone;
     private OwnerType ownerType;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public OwnerType getOwnerType() {
-        return ownerType;
-    }
-
-    public void setOwnerType(OwnerType ownerType) {
-        this.ownerType = ownerType;
-    }
 
     @Override
     public boolean equals(Object o) {
