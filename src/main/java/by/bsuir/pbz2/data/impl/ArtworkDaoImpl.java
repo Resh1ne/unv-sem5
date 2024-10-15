@@ -1,9 +1,20 @@
 package by.bsuir.pbz2.data.impl;
 
+import by.bsuir.pbz2.data.ArtistDao;
 import by.bsuir.pbz2.data.ArtworkDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.entity.Artwork;
+import by.bsuir.pbz2.data.entity.enums.ExecutionType;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArtworkDaoImpl implements ArtworkDao {
@@ -21,26 +32,116 @@ public class ArtworkDaoImpl implements ArtworkDao {
 
     @Override
     public Artwork create(Artwork entity) {
-        return null;
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(CREATION_QUERY, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, entity.getTitle());
+            statement.setString(2, entity.getExecutionType().toString());
+            statement.setDate(3, Date.valueOf(entity.getCreationDate()));
+            setNullBigDecimal(4, entity.getHeight(), statement);
+            setNullBigDecimal(5, entity.getWidth(), statement);
+            setNullBigDecimal(6, entity.getVolume(), statement);
+            statement.setLong(7, entity.getArtist().getId());
+            statement.executeUpdate();
+            ResultSet keys = statement.getGeneratedKeys();
+            if (keys.next()) {
+                long id = keys.getLong("id");
+                return findById(id);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        throw new RuntimeException("Can't create artwork: " + entity);
+    }
+
+    private void setNullBigDecimal(int index, BigDecimal value, PreparedStatement statement) throws SQLException {
+        if (value == null) {
+            statement.setNull(index, Types.DOUBLE);
+        } else {
+            statement.setBigDecimal(index, value);
+        }
     }
 
     @Override
     public Artwork findById(Long id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return mapRow(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return null;
+    }
+
+    private Artwork mapRow(ResultSet resultSet) throws SQLException {
+        Artwork artwork = new Artwork();
+        artwork.setId(resultSet.getLong("id"));
+        artwork.setTitle(resultSet.getString("title"));
+        artwork.setExecutionType(ExecutionType.valueOf(resultSet.getString("execution_type")));
+        artwork.setCreationDate(resultSet.getDate("creation_date").toLocalDate());
+        artwork.setHeight(resultSet.getBigDecimal("height"));
+        artwork.setWidth(resultSet.getBigDecimal("width"));
+        artwork.setVolume(resultSet.getBigDecimal("volume"));
+        Long artist_id = resultSet.getLong("artist_id");
+        ArtistDao artistDao = new ArtistDaoImpl(this.dataSource);
+        artwork.setArtist(artistDao.findById(artist_id));
+        return artwork;
     }
 
     @Override
     public List<Artwork> findAll() {
-        return null;
+        List<Artwork> artworks = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(FIND_ALL_QUERY);
+            while (resultSet.next()) {
+                Artwork artwork = mapRow(resultSet);
+                artworks.add(artwork);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return artworks;
     }
 
     @Override
     public Artwork update(Artwork entity) {
-        return null;
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
+            statement.setString(1, entity.getTitle());
+            statement.setString(2, entity.getExecutionType().toString());
+            statement.setDate(3, Date.valueOf(entity.getCreationDate()));
+            setNullBigDecimal(4, entity.getHeight(), statement);
+            setNullBigDecimal(5, entity.getWidth(), statement);
+            setNullBigDecimal(6, entity.getVolume(), statement);
+            statement.setLong(7, entity.getArtist().getId());
+            statement.setLong(8, entity.getId());
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return findById(entity.getId());
+            } else {
+                throw new RuntimeException("Failed to update artwork. No rows affected.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+            statement.setLong(1, id);
+            int rowsAffected = statement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
