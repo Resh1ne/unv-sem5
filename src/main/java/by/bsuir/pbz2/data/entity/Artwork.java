@@ -19,19 +19,19 @@ public class Artwork {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal volume;
-    private Artist artist;
+    private Artist artistId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Artwork artwork = (Artwork) o;
-        return Objects.equals(id, artwork.id) && Objects.equals(title, artwork.title) && executionType == artwork.executionType && Objects.equals(creationDate, artwork.creationDate) && Objects.equals(height, artwork.height) && Objects.equals(width, artwork.width) && Objects.equals(volume, artwork.volume) && Objects.equals(artist, artwork.artist);
+        return Objects.equals(id, artwork.id) && Objects.equals(title, artwork.title) && executionType == artwork.executionType && Objects.equals(creationDate, artwork.creationDate) && Objects.equals(height, artwork.height) && Objects.equals(width, artwork.width) && Objects.equals(volume, artwork.volume) && Objects.equals(artistId, artwork.artistId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, executionType, creationDate, height, width, volume, artist);
+        return Objects.hash(id, title, executionType, creationDate, height, width, volume, artistId);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Artwork {
                 ", height=" + height +
                 ", width=" + width +
                 ", volume=" + volume +
-                ", artistId=" + artist +
+                ", artistId=" + artistId +
                 '}';
     }
 }
