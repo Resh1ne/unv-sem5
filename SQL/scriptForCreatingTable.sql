@@ -1,9 +1,9 @@
 CREATE TABLE exhibition_types (
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(50)
+    exhibition_type VARCHAR(50)
 );
 
-INSERT INTO exhibition_types (name)
+INSERT INTO exhibition_types (exhibition_type)
 VALUES
     ('VISUAL_ART'),
     ('APPLIED_ART'),
