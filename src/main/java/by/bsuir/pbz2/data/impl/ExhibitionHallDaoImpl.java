@@ -17,11 +17,23 @@ import java.util.List;
 
 public class ExhibitionHallDaoImpl implements ExhibitionHallDao {
     private final DataSource dataSource;
-    private static final String CREATION_QUERY = "";
-    private static final String FIND_BY_ID_QUERY = "";
-    private static final String FIND_ALL_QUERY = "";
-    private static final String UPDATE_QUERY = "";
-    private static final String DELETE_QUERY = "";
+    private static final String CREATION_QUERY = "INSERT INTO exhibition_halls " +
+            "(name, area, address, phone, owner_id) " +
+            "VALUES (?, ?, ?, ?, ?)";
+    private static final String FIND_BY_ID_QUERY = "SELECT id, name, area, address, phone, owner_id " +
+            "FROM exhibition_halls " +
+            "WHERE id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT id, name, area, address, phone, owner_id " +
+            "FROM exhibition_halls ";
+    private static final String UPDATE_QUERY = "UPDATE exhibition_halls " +
+            "SET " +
+            "name = ?, " +
+            "area = ?, " +
+            "address = ?, " +
+            "phone = ?, " +
+            "owner_id = ? " +
+            "WHERE id = ?";
+    private static final String DELETE_QUERY = "DELETE FROM exhibition_halls WHERE id = ?";
 
     public ExhibitionHallDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;

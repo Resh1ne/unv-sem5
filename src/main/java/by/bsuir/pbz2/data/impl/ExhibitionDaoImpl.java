@@ -17,11 +17,25 @@ import java.util.List;
 
 public class ExhibitionDaoImpl implements ExhibitionDao {
     private final DataSource dataSource;
-    private static final String CREATION_QUERY = "";
-    private static final String FIND_BY_ID_QUERY = "";
-    private static final String FIND_ALL_QUERY = "";
-    private static final String UPDATE_QUERY = "";
-    private static final String DELETE_QUERY = "";
+    private static final String CREATION_QUERY = "INSERT INTO exhibitions " +
+            "(name, hall_id, type_id, start_date, end_date) " +
+            "VALUES (?, ?, (SELECT id FROM exhibition_types et WHERE et.exhibition_type = ?), ?, ?)";
+    private static final String FIND_BY_ID_QUERY = "SELECT e.id, e.name, e.hall_id, et.exhibition_type, e.start_date, e.end_date " +
+            "FROM exhibitions e " +
+            "JOIN exhibition_types et ON e.type_id = et.id " +
+            "WHERE e.id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT e.id, e.name, e.hall_id, et.exhibition_type, e.start_date, e.end_date " +
+            "FROM exhibitions e " +
+            "JOIN exhibition_types et ON e.type_id = et.id ";
+    private static final String UPDATE_QUERY = "UPDATE exhibitions " +
+            "SET " +
+            "name = ?, " +
+            "hall_id = ?, " +
+            "type_id = (SELECT id FROM exhibition_types et WHERE et.exhibition_type = ?), " +
+            "start_date = ?, " +
+            "end_date = ? " +
+            "WHERE id = ?";
+    private static final String DELETE_QUERY = "DELETE FROM exhibitions WHERE id = ?";
 
     public ExhibitionDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -70,7 +84,7 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
         Long hallId = resultSet.getLong("hall_id");
         ExhibitionHallDao exhibitionHallDao = new ExhibitionHallDaoImpl(this.dataSource);
         exhibition.setHallId(exhibitionHallDao.findById(hallId));
-        exhibition.setType(ExhibitionType.valueOf(resultSet.getString("type_id")));
+        exhibition.setType(ExhibitionType.valueOf(resultSet.getString("exhibition_type")));
         exhibition.setStartDate(resultSet.getDate("start_date").toLocalDate());
         exhibition.setEndDate(resultSet.getDate("end_date").toLocalDate());
         return exhibition;
