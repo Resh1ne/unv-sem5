@@ -18,36 +18,37 @@ import java.util.List;
 
 public class ArtworkExhibitionDaoImpl implements ArtworkExhibitionDao {
     private final DataSource dataSource;
-    private static final String CREATION_QUERY = "";
-    private static final String FIND_BY_ARTWORK_ID_QUERY = "";
-    private static final String FIND_BY_EXHIBITION_ID_QUERY = "";
-    private static final String FIND_ALL_QUERY = "";
+    private static final String CREATION_QUERY = "INSERT INTO artwork_exhibitions (exhibition_id, artwork_id) VALUES (?, ?)";
+    private static final String FIND_BY_EXHIBITION_ARTWORK_ID_QUERY = "SELECT exhibition_id, artwork_id " +
+            "FROM artwork_exhibitions WHERE exhibition_id = ? AND artwork_id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT exhibition_id, artwork_id FROM artwork_exhibitions";
 
-    private static final String UPDATE_QUERY = "";
-    private static final String DELETE_QUERY = "";
+    private static final String DELETE_QUERY = "DELETE FROM artwork_exhibitions WHERE exhibition_id = ? AND artwork_id = ?";
 
     public ArtworkExhibitionDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
-    public ArtworkExhibition create(ArtworkExhibition artworkExhibition) {
+    public boolean create(ArtworkExhibition artworkExhibition) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(CREATION_QUERY);
             statement.setLong(1, artworkExhibition.getExhibitionId().getId());
             statement.setLong(2, artworkExhibition.getArtworkId().getId());
-            statement.executeUpdate();
-            return findByExhibitionId(artworkExhibition.getExhibitionId());
+            int rowsAffected = statement.executeUpdate();
+
+            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Can't create ArtworkExhibition: " + artworkExhibition + "\n" + e);
         }
     }
 
     @Override
-    public ArtworkExhibition findByArtworkId(Artwork artworkId) {
+    public ArtworkExhibition findByExhibitionArtworkId(Artwork artworkId, Exhibition exhibitionId) {
         try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(FIND_BY_ARTWORK_ID_QUERY);
-            statement.setLong(1, artworkId.getId());
+            PreparedStatement statement = connection.prepareStatement(FIND_BY_EXHIBITION_ARTWORK_ID_QUERY);
+            statement.setLong(1, exhibitionId.getId());
+            statement.setLong(2, artworkId.getId());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return mapRow(resultSet);
@@ -70,21 +71,6 @@ public class ArtworkExhibitionDaoImpl implements ArtworkExhibitionDao {
     }
 
     @Override
-    public ArtworkExhibition findByExhibitionId(Exhibition exhibitionId) {
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(FIND_BY_EXHIBITION_ID_QUERY);
-            statement.setLong(1, exhibitionId.getId());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return mapRow(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-
-    @Override
     public List<ArtworkExhibition> findAll() {
         List<ArtworkExhibition> artworkExhibitions = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
@@ -98,25 +84,6 @@ public class ArtworkExhibitionDaoImpl implements ArtworkExhibitionDao {
             throw new RuntimeException(e);
         }
         return artworkExhibitions;
-    }
-
-    @Override
-    public ArtworkExhibition update(ArtworkExhibition artworkExhibition) {
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
-            statement.setLong(1, artworkExhibition.getExhibitionId().getId());
-            statement.setLong(2, artworkExhibition.getArtworkId().getId());
-
-            int rowsAffected = statement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                return findByExhibitionId(artworkExhibition.getExhibitionId());
-            } else {
-                throw new RuntimeException("Failed to update ArtworkExhibition. No rows affected.");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
