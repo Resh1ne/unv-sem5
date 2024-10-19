@@ -61,7 +61,8 @@ CREATE TABLE artworks (
     height DECIMAL(10, 2),
     width DECIMAL(10, 2),
     volume DECIMAL(10, 2),  -- Только для скульптур
-    artist_id INT REFERENCES artists
+    artist_id INT REFERENCES artists,
+    CONSTRAINT unique_artwork_per_artist UNIQUE (title, artist_id)
 );
 
 CREATE TABLE artwork_exhibitions (
