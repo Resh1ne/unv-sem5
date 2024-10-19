@@ -1,35 +1,22 @@
 CREATE TABLE exhibition_types (
     id BIGSERIAL PRIMARY KEY,
-    exhibition_type VARCHAR(50)
+    exhibition_type VARCHAR(50),
+	CONSTRAINT unique_exhibition_type_name UNIQUE (exhibition_type)
 );
 
-INSERT INTO exhibition_types (exhibition_type)
-VALUES
-    ('VISUAL_ART'),
-    ('APPLIED_ART'),
-    ('SCULPTURE');
 
 CREATE TABLE owner_types (
     id BIGSERIAL PRIMARY KEY,
-    owner_type VARCHAR(50)
+    owner_type VARCHAR(50),
+	CONSTRAINT unique_owner_type_name UNIQUE (owner_type)
 );
 
-INSERT INTO owner_types (owner_type)
-VALUES
-    ('CITY_ORGANIZATION'),
-    ('REGIONAL_ORGANIZATION'),
-    ('PUBLIC_ORGANIZATION'),
-    ('PRIVATE_INDIVIDUAL');
 
 CREATE TABLE execution_types (
     id BIGSERIAL PRIMARY KEY,
-    execution VARCHAR(50)
+    execution VARCHAR(50),
+	CONSTRAINT unique_execution_type_name UNIQUE (execution)
 );
-INSERT INTO execution_types (execution)
-VALUES
-    ('PAINTING'),
-    ('WATERCOLOR'),
-    ('SCULPTURE');
 
 CREATE TABLE owners (
     id BIGSERIAL PRIMARY KEY,
@@ -84,6 +71,25 @@ CREATE TABLE artwork_exhibitions (
 );
 
 -- Заполнение таблиц
+INSERT INTO owner_types (owner_type)
+VALUES
+    ('CITY_ORGANIZATION'),
+    ('REGIONAL_ORGANIZATION'),
+    ('PUBLIC_ORGANIZATION'),
+    ('PRIVATE_INDIVIDUAL');
+
+INSERT INTO execution_types (execution)
+VALUES
+    ('PAINTING'),
+    ('WATERCOLOR'),
+    ('SCULPTURE');
+
+INSERT INTO exhibition_types (exhibition_type)
+VALUES
+    ('VISUAL_ART'),
+    ('APPLIED_ART'),
+    ('SCULPTURE');
+
 INSERT INTO owners (name, address, phone, type_id)
 VALUES
     ('City Museum', '123 Main St', '123-456-7890', 1),
