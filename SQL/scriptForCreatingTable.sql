@@ -23,7 +23,8 @@ CREATE TABLE owners (
     name VARCHAR(100) NOT NULL,
     address VARCHAR(255),
     phone VARCHAR(20),
-    type_id INT REFERENCES owner_types
+    type_id INT REFERENCES owner_type
+    CONSTRAINT fk_owner_type FOREIGN KEY (type_id) REFERENCES owner_types(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE exhibition_halls (
@@ -43,6 +44,8 @@ CREATE TABLE exhibitions (
     start_date DATE,
     end_date DATE
 );
+
+CREATE INDEX idx_exhibition_dates ON exhibitions (start_date, end_date);
 
 CREATE TABLE artists (
     id BIGSERIAL PRIMARY KEY,
