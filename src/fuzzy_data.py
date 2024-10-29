@@ -1,0 +1,42 @@
+from typing import Dict
+
+
+class Set:
+    def __init__(self):
+        self.elements: Dict[str, float] = {}
+
+    def push_element(self, name: str, value: float):
+        self.elements[name] = value
+
+    def __iter__(self):
+        return iter(self.elements.items())
+
+    def __str__(self):
+        return ", ".join(f"<{name}, {val}>" for name, val in self.elements.items())
+
+
+class Sets:
+    def __init__(self):
+        self.sets: Dict[str, Set] = {}
+
+    def push_set(self, name: str, set: Set):
+        if name in self.sets:
+            raise Exception("Tried to insert an already existing element")
+
+        self.sets[name] = set
+
+    def __getitem__(self, index):
+        return self.sets[index]
+
+    def __iter__(self):
+        return iter(self.sets.keys())
+
+
+class Implication:
+    def __init__(
+            self, first_set: str, first_elem: str, second_set: str, second_elem: str
+    ):
+        self.first: str = first_set
+        self.first_elem: str = first_elem
+        self.second: str = second_set
+        self.second_elem: str = second_elem
