@@ -43,7 +43,7 @@ def get_set(line: str) -> Tuple[str, Set]:
         if value < 0.0 or value > 1.0:
             raise ParseError("The float number has to be in range of [0, 1]")
 
-        set.push_element(name, value)
+        set.push_element(name, int(value * 10000))
 
     return (set_name, set)
 

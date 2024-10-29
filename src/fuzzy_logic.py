@@ -11,13 +11,13 @@ class ImplMatrix:
     ):
         self.first_elems_set: TSet[str] = set()
         self.second_elems_set: TSet[str] = set()
-        self.matrix: Dict[Tuple[str, str], float] = {}
+        self.matrix: Dict[Tuple[str, str], int] = {}
         self.first_name = first_name
         self.second_name = second_name
         self.first_elem = first_elem
         self.second_elem = second_elem
 
-    def calc_cell(self, a: Tuple[str, float], b: Tuple[str, float]):
+    def calc_cell(self, a: Tuple[str, int], b: Tuple[str, int]):
         self.matrix[(a[0], b[0])] = impl_func(a[1], b[1])
         self.first_elems_set.add(a[0])
         self.second_elems_set.add(b[0])
@@ -36,12 +36,12 @@ class ImplMatrix:
         self.matrix[index] = item
 
 
-def t_norm(a: float, b: float) -> float:
-    return a * b
+def t_norm(a: int, b: int) -> int:
+    return max(0, a + b - 1)
 
 
-def impl_func(a: float, b: float) -> float:
-    return 1 if a == 0.0 else min(1.0, b / a)
+def impl_func(a: int, b: int) -> int:
+    return min(1, 1 - a + b)
 
 
 def get_impl_matrix(impl: Implication, sets: Sets) -> ImplMatrix:
@@ -109,7 +109,9 @@ def algorithm(file_name: str):
                     sets.push_set(new_set_name, new_set)
                     set_queue.append(new_set_name)
                     print(
-                        f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}}")
+                        f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}}"
+                    )
                 else:
                     print(
-                        f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}} = {same_set}")
+                        f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}} = {same_set}"
+                    )

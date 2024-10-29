@@ -3,16 +3,19 @@ from typing import Dict
 
 class Set:
     def __init__(self):
-        self.elements: Dict[str, float] = {}
+        self.elements: Dict[str, int] = {}
 
-    def push_element(self, name: str, value: float):
+    def push_element(self, name: str, value: int):
+        if name in self.elements:
+            raise Exception("Tried to insert an already existing element")
+
         self.elements[name] = value
 
     def __iter__(self):
         return iter(self.elements.items())
 
     def __str__(self):
-        return ", ".join(f"<{name}, {val}>" for name, val in self.elements.items())
+        return ", ".join(f"<{name}, {float(val) / 10000}>" for name, val in self.elements.items())
 
 
 class Sets:
