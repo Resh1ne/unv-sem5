@@ -129,37 +129,26 @@ VALUES
     (2, 2),
     (3, 3);
 
-CREATE OR REPLACE FUNCTION calculate_exhibition_duration(start_date DATE, end_date DATE)
-RETURNS INTEGER AS $$
-BEGIN
-    RETURN end_date - start_date;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE PROCEDURE add_new_exhibition(
-    p_name VARCHAR,
-    p_hall_id INT,
-    p_type_id INT,
-    p_start_date DATE,
-    p_end_date DATE
-)
-LANGUAGE plpgsql
-AS $$
+--------
+-- DROP PROCEDURE public.show_current_exhibitions(date);
+CREATE OR REPLACE PROCEDURE public.show_current_exhibitions(IN cur_date date)
+ LANGUAGE plpgsql
+AS $procedure$
 DECLARE
-    duration INTEGER;
+    exhibition_record RECORD;
 BEGIN
-    -- Рассчитываем продолжительность
-    duration := calculate_exhibition_duration(p_start_date, p_end_date);
-
-    -- Вставляем новую выставку
-    INSERT INTO exhibitions (name, hall_id, type_id, start_date, end_date)
-    VALUES (p_name, p_hall_id, p_type_id, p_start_date, p_end_date);
-
-    -- Выводим продолжительность
-    RAISE NOTICE 'Exhibition duration: % days', duration;
+    FOR exhibition_record IN
+        SELECT e.name AS exhibition_name, h.address AS hall_address
+        FROM exhibitions e
+        JOIN exhibition_halls h ON e.hall_id = h.id
+        WHERE cur_date BETWEEN e.start_date AND e.end_date
+    LOOP
+        RAISE NOTICE 'Exhibition: %, Hall Address: %', exhibition_record.exhibition_name, exhibition_record.hall_address;
+    END LOOP;
 END;
-$$;
-
+$procedure$
+;
+-- DROP FUNCTION public.set_creation_date();
 CREATE OR REPLACE FUNCTION set_creation_date()
 RETURNS TRIGGER AS $$
 BEGIN
