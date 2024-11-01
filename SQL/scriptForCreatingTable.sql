@@ -129,26 +129,7 @@ VALUES
     (2, 2),
     (3, 3);
 
---------
--- DROP PROCEDURE public.show_current_exhibitions(date);
-CREATE OR REPLACE PROCEDURE public.show_current_exhibitions(IN cur_date date)
- LANGUAGE plpgsql
-AS $procedure$
-DECLARE
-    exhibition_record RECORD;
-BEGIN
-    FOR exhibition_record IN
-        SELECT e.name AS exhibition_name, h.address AS hall_address
-        FROM exhibitions e
-        JOIN exhibition_halls h ON e.hall_id = h.id
-        WHERE cur_date BETWEEN e.start_date AND e.end_date
-    LOOP
-        RAISE NOTICE 'Exhibition: %, Hall Address: %', exhibition_record.exhibition_name, exhibition_record.hall_address;
-    END LOOP;
-END;
-$procedure$
-;
--- DROP FUNCTION public.set_creation_date();
+---------------------------------
 CREATE OR REPLACE FUNCTION set_creation_date()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -163,3 +144,45 @@ CREATE TRIGGER before_insert_artworks
 BEFORE INSERT ON artworks
 FOR EACH ROW
 EXECUTE FUNCTION set_creation_date();
+---------------------------------
+CREATE OR REPLACE FUNCTION get_current_exhibitions(cur_date DATE)
+RETURNS TABLE(exhibition_name VARCHAR, hall_address VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT e.name AS exhibition_name, h.address AS hall_address
+    FROM exhibitions e
+    JOIN exhibition_halls h ON e.hall_id = h.id
+    WHERE cur_date BETWEEN e.start_date AND e.end_date;
+END;
+$$ LANGUAGE plpgsql;
+---------------------------------
+CREATE OR REPLACE PROCEDURE add_artwork_to_exhibition(
+    p_exhibition_id INT,
+    p_artwork_id INT
+)
+LANGUAGE plpgsql AS $$
+DECLARE
+    conflict_count INT;
+BEGIN
+    -- Проверяем, есть ли конфликты с другими выставками
+    SELECT COUNT(*)
+    INTO conflict_count
+    FROM artwork_exhibitions ae
+    JOIN exhibitions e ON ae.exhibition_id = e.id
+    WHERE ae.artwork_id = p_artwork_id
+    AND (
+        (e.start_date < (SELECT end_date FROM exhibitions WHERE id = p_exhibition_id) AND e.end_date > (SELECT start_date FROM exhibitions WHERE id = p_exhibition_id))
+    );
+
+    -- Если конфликты отсутствуют, добавляем запись
+    IF conflict_count = 0 THEN
+        INSERT INTO artwork_exhibitions (exhibition_id, artwork_id)
+        VALUES (p_exhibition_id, p_artwork_id);
+    ELSE
+        RAISE EXCEPTION 'Artwork % is already displayed in another exhibition during the same period.', p_artwork_id;
+    END IF;
+END;
+$$;
+---------------------------------
+
+
