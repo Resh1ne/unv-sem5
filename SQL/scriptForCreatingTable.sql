@@ -41,7 +41,8 @@ CREATE TABLE exhibitions (
     hall_id INT REFERENCES exhibition_halls,
     type_id INT REFERENCES exhibition_types,
     start_date DATE,
-    end_date DATE
+    end_date DATE,
+    CONSTRAINT chk_end_date_greater_than_start_date CHECK (end_date >= start_date)
 );
 
 CREATE INDEX idx_exhibition_dates ON exhibitions (start_date, end_date);
