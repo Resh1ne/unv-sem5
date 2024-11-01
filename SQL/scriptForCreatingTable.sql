@@ -1,20 +1,20 @@
 CREATE TABLE exhibition_types (
     id BIGSERIAL PRIMARY KEY,
-    exhibition_type VARCHAR(50),
+    exhibition_type VARCHAR(50) NOT NULL,
 	CONSTRAINT unique_exhibition_type_name UNIQUE (exhibition_type)
 );
 
 
 CREATE TABLE owner_types (
     id BIGSERIAL PRIMARY KEY,
-    owner_type VARCHAR(50),
+    owner_type VARCHAR(50) NOT NULL,
 	CONSTRAINT unique_owner_type_name UNIQUE (owner_type)
 );
 
 
 CREATE TABLE execution_types (
     id BIGSERIAL PRIMARY KEY,
-    execution VARCHAR(50),
+    execution VARCHAR(50) NOT NULL,
 	CONSTRAINT unique_execution_type_name UNIQUE (execution)
 );
 
@@ -40,8 +40,8 @@ CREATE TABLE exhibitions (
     name VARCHAR(100) NOT NULL,
     hall_id INT REFERENCES exhibition_halls,
     type_id INT REFERENCES exhibition_types,
-    start_date DATE,
-    end_date DATE,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
     CONSTRAINT chk_end_date_greater_than_start_date CHECK (end_date >= start_date)
 );
 
