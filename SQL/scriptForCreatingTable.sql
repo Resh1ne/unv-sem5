@@ -23,8 +23,7 @@ CREATE TABLE owners (
     name VARCHAR(100) NOT NULL,
     address VARCHAR(255),
     phone VARCHAR(20),
-    type_id INT REFERENCES owner_type
-    CONSTRAINT fk_owner_type FOREIGN KEY (type_id) REFERENCES owner_types(id) ON DELETE CASCADE ON UPDATE CASCADE
+    type_id INT REFERENCES owner_types
 );
 
 CREATE TABLE exhibition_halls (
@@ -129,3 +128,49 @@ VALUES
     (1, 1),
     (2, 2),
     (3, 3);
+
+CREATE OR REPLACE FUNCTION calculate_exhibition_duration(start_date DATE, end_date DATE)
+RETURNS INTEGER AS $$
+BEGIN
+    RETURN end_date - start_date;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE add_new_exhibition(
+    p_name VARCHAR,
+    p_hall_id INT,
+    p_type_id INT,
+    p_start_date DATE,
+    p_end_date DATE
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    duration INTEGER;
+BEGIN
+    -- Рассчитываем продолжительность
+    duration := calculate_exhibition_duration(p_start_date, p_end_date);
+
+    -- Вставляем новую выставку
+    INSERT INTO exhibitions (name, hall_id, type_id, start_date, end_date)
+    VALUES (p_name, p_hall_id, p_type_id, p_start_date, p_end_date);
+
+    -- Выводим продолжительность
+    RAISE NOTICE 'Exhibition duration: % days', duration;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION set_creation_date()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.creation_date IS NULL THEN
+        NEW.creation_date := CURRENT_DATE;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER before_insert_artworks
+BEFORE INSERT ON artworks
+FOR EACH ROW
+EXECUTE FUNCTION set_creation_date();
