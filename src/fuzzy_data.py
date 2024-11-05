@@ -1,3 +1,10 @@
+# Индивидуальная практическая работа 1 по дисциплине ЛОИС
+# Выполнена студентом группы 221702 БГУИР Потоцкий Даниил Александрович
+# Основные классы для работы с нечёткими множествами
+# Последние изменения: 30.10.2024, версия: 1
+#
+# Использованные источники:
+# Логические основы интеллектуальных систем. Практикум: учебно-методическое пособие / В.В.Голенков, В.П.Ивашенко, Д.Г.Колб, К.А.Уваров. – Минск: БГУИР, 2011.
 from typing import Dict
 
 
@@ -37,7 +44,7 @@ class Sets:
 
 class Implication:
     def __init__(
-        self, first_set: str, first_elem: str, second_set: str, second_elem: str
+            self, first_set: str, first_elem: str, second_set: str, second_elem: str
     ):
         self.first: str = first_set
         self.first_elem: str = first_elem

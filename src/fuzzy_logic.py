@@ -1,12 +1,20 @@
+# Индивидуальная практическая работа 1 по дисциплине ЛОИС
+# Выполнена студентом группы 221702 БГУИР Потоцкий Даниил Александрович
+# Основные методы для нахождения прямого нечёткого вывода
+# Последние изменения: 30.10.2024, версия: 1
+#
+# Использованные источники:
+# Логические основы интеллектуальных систем. Практикум: учебно-методическое пособие / В.В.Голенков, В.П.Ивашенко, Д.Г.Колб, К.А.Уваров. – Минск: БГУИР, 2011.
 from fuzzy_data import Implication, Sets, Set
 from typing import Set as TSet, Tuple, Dict, List, Optional
 from parse import parse_file
 
 count = 1
 
+
 class ImplMatrix:
     def __init__(
-        self, first_name: str, first_elem: str, second_name: str, second_elem: str
+            self, first_name: str, first_elem: str, second_name: str, second_elem: str
     ):
         self.first_elems_set: TSet[str] = set()
         self.second_elems_set: TSet[str] = set()
@@ -40,10 +48,11 @@ def t_norm(a: int, b: int) -> int:
 
 
 def impl_func(a: int, b: int) -> int:
-    return min(1, 1 - a + b) 
+    return min(1, 1 - a + b)
+
 
 def get_impl_matrix(impl: Implication, sets: Sets) -> ImplMatrix:
-    matrix: ImplMatrix = ImplMatrix( impl.first, impl.first_elem, impl.second, impl.second_elem)
+    matrix: ImplMatrix = ImplMatrix(impl.first, impl.first_elem, impl.second, impl.second_elem)
     for elem1 in sets[impl.first]:
         for elem2 in sets[impl.second]:
             matrix.calc_cell(elem1, elem2)
@@ -65,7 +74,7 @@ def sup(matrix: ImplMatrix) -> Set:
 
 
 def apply_set_impl(set_name: str, matrix: ImplMatrix, sets: Sets) -> Set:
-    new_matrix: ImplMatrix = ImplMatrix( matrix.first_name, matrix.first_elem, matrix.second_name, matrix.second_elem)
+    new_matrix: ImplMatrix = ImplMatrix(matrix.first_name, matrix.first_elem, matrix.second_name, matrix.second_elem)
     set = sets[set_name]
     new_matrix.set_sets(matrix)
     for elem1 in set:
@@ -102,6 +111,8 @@ def algorithm(file_name: str) -> None:
                 if same_set is None:
                     sets.push_set(new_set_name, new_set)
                     set_queue.append(new_set_name)
-                    print( f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}}")
+                    print(
+                        f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}}")
                 else:
-                    print( f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}} = {same_set}")
+                    print(
+                        f"{{ {current_set}, {matrix.first_name}({matrix.first_elem})~>{matrix.second_name}({matrix.second_elem})}} |~ {new_set_name} = {{{str(new_set)}}} = {same_set}")
