@@ -1,19 +1,9 @@
-# Индивидуальная практическая работа 1 по дисциплине ЛОИС
-# Выполнена студентом группы 221702 БГУИР Потоцкий Даниил Александрович
-# Функции перевода строки в данные
-# Последние изменения: 30.10.2024, версия: 1
-#
-# Использованные источники:
-# Логические основы интеллектуальных систем. Практикум: учебно-методическое пособие / В.В.Голенков, В.П.Ивашенко, Д.Г.Колб, К.А.Уваров. – Минск: БГУИР, 2011.
-
 from typing import List, Tuple
 from fuzzy_data import Sets, Set, Implication
-
 
 class ParseError(Exception):
     def __init__(self, message="Error in input file") -> None:
         super().__init__(message)
-
 
 def get_set(line: str) -> Tuple[str, Set]:
     parts = [s.strip() for s in line.split("=")]
@@ -65,16 +55,8 @@ def get_implication(line: str) -> Implication:
     first = parts[0].strip()
     second = parts[1].strip()
 
-    first_elem = (
-        [first[first.find("(") + 1: first.find(")")]]
-        if "(" in first and ")" in first
-        else []
-    )
-    second_elem = (
-        [second[second.find("(") + 1: second.find(")")]]
-        if "(" in second and ")" in second
-        else []
-    )
+    first_elem = ( [first[first.find("(") + 1 : first.find(")")]] if "(" in first and ")" in first else [])
+    second_elem = ( [second[second.find("(") + 1 : second.find(")")]] if "(" in second and ")" in second else [])
 
     if len(first_elem) != 1 or len(second_elem) != 1:
         raise ParseError("Not appropriate bracket count")
@@ -88,18 +70,20 @@ def get_implication(line: str) -> Implication:
 def parse_file(file_str: str) -> Tuple[Sets, List[Implication]]:
     sets: Sets = Sets()
     implications: List[Implication] = []
-    with open(file_str, mode="r") as file:
-        for line in file:
-            line = line.strip()
-            if not line:
-                continue
+    file = open(file_str, mode="r") 
+    lines = file.readlines()
+    file.close()
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
 
-            if "~>" in line:
-                implications.append(get_implication(line))
-            elif "=" in line:
-                name, res_set = get_set(line)
-                sets.push_set(name, res_set)
-            else:
-                raise ParseError("Invalid statement")
+        if "~>" in line:
+            implications.append(get_implication(line))
+        elif "=" in line:
+            name, res_set = get_set(line)
+            sets.push_set(name, res_set)
+        else:
+            raise ParseError("Invalid statement")
 
     return sets, implications
