@@ -1,12 +1,12 @@
 package by.bsuir.pbz2.util.impl;
 
-import by.bsuir.pbz2.data.ArtworkExhibitionDao;
+import by.bsuir.pbz2.data.dao.ArtworkExhibitionDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
 import by.bsuir.pbz2.data.entity.Artwork;
 import by.bsuir.pbz2.data.entity.ArtworkExhibition;
 import by.bsuir.pbz2.data.entity.Exhibition;
-import by.bsuir.pbz2.data.impl.ArtworkExhibitionDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.ArtworkExhibitionDaoImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 
 import java.util.List;

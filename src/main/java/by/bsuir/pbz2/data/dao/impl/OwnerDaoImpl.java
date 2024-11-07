@@ -1,9 +1,10 @@
-package by.bsuir.pbz2.data.impl;
+package by.bsuir.pbz2.data.dao.impl;
 
-import by.bsuir.pbz2.data.OwnerDao;
 import by.bsuir.pbz2.data.connection.DataSource;
+import by.bsuir.pbz2.data.dao.OwnerDao;
 import by.bsuir.pbz2.data.entity.Owner;
 import by.bsuir.pbz2.data.entity.enums.OwnerType;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class OwnerDaoImpl implements OwnerDao {
     private final DataSource dataSource;
     private static final String CREATION_QUERY = "INSERT INTO owners " +
@@ -34,9 +36,6 @@ public class OwnerDaoImpl implements OwnerDao {
             "WHERE id = ?";
     private static final String DELETE_QUERY = "DELETE FROM owners WHERE id = ?";
 
-    public OwnerDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public Owner create(Owner entity) {

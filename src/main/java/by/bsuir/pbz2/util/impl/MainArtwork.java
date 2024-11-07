@@ -1,13 +1,13 @@
 package by.bsuir.pbz2.util.impl;
 
-import by.bsuir.pbz2.data.ArtistDao;
-import by.bsuir.pbz2.data.ArtworkDao;
+import by.bsuir.pbz2.data.dao.ArtistDao;
+import by.bsuir.pbz2.data.dao.ArtworkDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
 import by.bsuir.pbz2.data.entity.Artwork;
 import by.bsuir.pbz2.data.entity.enums.ExecutionType;
-import by.bsuir.pbz2.data.impl.ArtistDaoImpl;
-import by.bsuir.pbz2.data.impl.ArtworkDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.ArtistDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.ArtworkDaoImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 
 import java.time.LocalDate;

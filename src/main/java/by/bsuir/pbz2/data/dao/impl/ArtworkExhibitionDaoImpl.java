@@ -1,12 +1,13 @@
-package by.bsuir.pbz2.data.impl;
+package by.bsuir.pbz2.data.dao.impl;
 
-import by.bsuir.pbz2.data.ArtworkDao;
-import by.bsuir.pbz2.data.ArtworkExhibitionDao;
-import by.bsuir.pbz2.data.ExhibitionDao;
 import by.bsuir.pbz2.data.connection.DataSource;
+import by.bsuir.pbz2.data.dao.ArtworkDao;
+import by.bsuir.pbz2.data.dao.ArtworkExhibitionDao;
+import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.entity.Artwork;
 import by.bsuir.pbz2.data.entity.ArtworkExhibition;
 import by.bsuir.pbz2.data.entity.Exhibition;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ArtworkExhibitionDaoImpl implements ArtworkExhibitionDao {
     private final DataSource dataSource;
     private static final String CREATION_QUERY = "INSERT INTO artwork_exhibitions (exhibition_id, artwork_id) VALUES (?, ?)";
@@ -25,9 +27,6 @@ public class ArtworkExhibitionDaoImpl implements ArtworkExhibitionDao {
 
     private static final String DELETE_QUERY = "DELETE FROM artwork_exhibitions WHERE exhibition_id = ? AND artwork_id = ?";
 
-    public ArtworkExhibitionDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public boolean create(ArtworkExhibition artworkExhibition) {

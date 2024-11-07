@@ -1,8 +1,9 @@
-package by.bsuir.pbz2.data.impl;
+package by.bsuir.pbz2.data.dao.impl;
 
-import by.bsuir.pbz2.data.ArtistDao;
 import by.bsuir.pbz2.data.connection.DataSource;
+import by.bsuir.pbz2.data.dao.ArtistDao;
 import by.bsuir.pbz2.data.entity.Artist;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ArtistDaoImpl implements ArtistDao {
     private final DataSource dataSource;
     private static final String CREATION_QUERY = "INSERT INTO artists " +
@@ -31,10 +33,6 @@ public class ArtistDaoImpl implements ArtistDao {
             "education = ? " +
             "WHERE id = ?";
     private static final String DELETE_QUERY = "DELETE FROM artists WHERE id = ?";
-
-    public ArtistDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public Artist create(Artist entity) {

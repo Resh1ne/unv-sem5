@@ -1,12 +1,12 @@
 package by.bsuir.pbz2.util.impl;
 
-import by.bsuir.pbz2.data.ExhibitionHallDao;
-import by.bsuir.pbz2.data.OwnerDao;
+import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
+import by.bsuir.pbz2.data.dao.OwnerDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
 import by.bsuir.pbz2.data.entity.ExhibitionHall;
-import by.bsuir.pbz2.data.impl.ExhibitionHallDaoImpl;
-import by.bsuir.pbz2.data.impl.OwnerDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.ExhibitionHallDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.OwnerDaoImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 
 import java.util.List;

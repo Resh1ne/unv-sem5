@@ -1,20 +1,19 @@
 package by.bsuir.pbz2.service.impl;
 
-import by.bsuir.pbz2.data.ArtworkExhibitionDao;
+import by.bsuir.pbz2.data.dao.ArtworkExhibitionDao;
 import by.bsuir.pbz2.data.entity.Artwork;
 import by.bsuir.pbz2.data.entity.ArtworkExhibition;
 import by.bsuir.pbz2.data.entity.Exhibition;
 import by.bsuir.pbz2.service.ArtworkExhibitionService;
 import by.bsuir.pbz2.service.dto.ArtworkExhibitionDto;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ArtworkExhibitionServiceImpl implements ArtworkExhibitionService {
     private final ArtworkExhibitionDao artworkExhibitionDao;
 
-    public ArtworkExhibitionServiceImpl(ArtworkExhibitionDao artworkExhibitionDao) {
-        this.artworkExhibitionDao = artworkExhibitionDao;
-    }
 
     @Override
     public void create(ArtworkExhibitionDto dto) {

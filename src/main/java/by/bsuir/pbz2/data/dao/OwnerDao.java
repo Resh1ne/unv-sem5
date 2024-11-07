@@ -1,4 +1,4 @@
-package by.bsuir.pbz2.data;
+package by.bsuir.pbz2.data.dao;
 
 import by.bsuir.pbz2.data.entity.Owner;
 

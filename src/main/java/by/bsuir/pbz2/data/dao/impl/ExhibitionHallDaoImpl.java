@@ -1,9 +1,10 @@
-package by.bsuir.pbz2.data.impl;
+package by.bsuir.pbz2.data.dao.impl;
 
-import by.bsuir.pbz2.data.ExhibitionHallDao;
-import by.bsuir.pbz2.data.OwnerDao;
 import by.bsuir.pbz2.data.connection.DataSource;
+import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
+import by.bsuir.pbz2.data.dao.OwnerDao;
 import by.bsuir.pbz2.data.entity.ExhibitionHall;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -15,6 +16,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ExhibitionHallDaoImpl implements ExhibitionHallDao {
     private final DataSource dataSource;
     private static final String CREATION_QUERY = "INSERT INTO exhibition_halls " +
@@ -35,9 +37,6 @@ public class ExhibitionHallDaoImpl implements ExhibitionHallDao {
             "WHERE id = ?";
     private static final String DELETE_QUERY = "DELETE FROM exhibition_halls WHERE id = ?";
 
-    public ExhibitionHallDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public ExhibitionHall create(ExhibitionHall entity) {

@@ -1,18 +1,17 @@
 package by.bsuir.pbz2.service.impl;
 
-import by.bsuir.pbz2.data.ExhibitionHallDao;
+import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.entity.ExhibitionHall;
 import by.bsuir.pbz2.service.ExhibitionHallService;
 import by.bsuir.pbz2.service.dto.ExhibitionHallDto;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ExhibitionHallServiceImpl implements ExhibitionHallService {
     private final ExhibitionHallDao exhibitionHallDao;
 
-    public ExhibitionHallServiceImpl(ExhibitionHallDao exhibitionHallDao) {
-        this.exhibitionHallDao = exhibitionHallDao;
-    }
 
     @Override
     public ExhibitionHallDto create(ExhibitionHallDto dto) {

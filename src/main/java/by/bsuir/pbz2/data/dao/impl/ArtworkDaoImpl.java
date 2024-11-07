@@ -1,10 +1,11 @@
-package by.bsuir.pbz2.data.impl;
+package by.bsuir.pbz2.data.dao.impl;
 
-import by.bsuir.pbz2.data.ArtistDao;
-import by.bsuir.pbz2.data.ArtworkDao;
 import by.bsuir.pbz2.data.connection.DataSource;
+import by.bsuir.pbz2.data.dao.ArtistDao;
+import by.bsuir.pbz2.data.dao.ArtworkDao;
 import by.bsuir.pbz2.data.entity.Artwork;
 import by.bsuir.pbz2.data.entity.enums.ExecutionType;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -17,6 +18,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ArtworkDaoImpl implements ArtworkDao {
     private final DataSource dataSource;
     private static final String CREATION_QUERY = "INSERT INTO artworks " +
@@ -40,10 +42,6 @@ public class ArtworkDaoImpl implements ArtworkDao {
             "artist_id = ? " +
             "WHERE id = ?";
     private static final String DELETE_QUERY = "DELETE FROM artworks WHERE id = ?";
-
-    public ArtworkDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
 
     @Override

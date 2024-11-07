@@ -1,18 +1,17 @@
 package by.bsuir.pbz2.service.impl;
 
-import by.bsuir.pbz2.data.OwnerDao;
+import by.bsuir.pbz2.data.dao.OwnerDao;
 import by.bsuir.pbz2.data.entity.Owner;
 import by.bsuir.pbz2.service.OwnerService;
 import by.bsuir.pbz2.service.dto.OwnerDto;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class OwnerServiceImpl implements OwnerService {
     private final OwnerDao ownerDao;
 
-    public OwnerServiceImpl(OwnerDao ownerDao) {
-        this.ownerDao = ownerDao;
-    }
 
     private Owner toOwnerEntity(OwnerDto dto) {
         Owner owner = new Owner();

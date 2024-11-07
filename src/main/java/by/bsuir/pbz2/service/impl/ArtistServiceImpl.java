@@ -1,18 +1,17 @@
 package by.bsuir.pbz2.service.impl;
 
-import by.bsuir.pbz2.data.ArtistDao;
+import by.bsuir.pbz2.data.dao.ArtistDao;
 import by.bsuir.pbz2.data.entity.Artist;
 import by.bsuir.pbz2.service.ArtistService;
 import by.bsuir.pbz2.service.dto.ArtistDto;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ArtistServiceImpl implements ArtistService {
     private final ArtistDao artistDao;
 
-    public ArtistServiceImpl(ArtistDao artistDao) {
-        this.artistDao = artistDao;
-    }
 
     @Override
     public ArtistDto create(ArtistDto dto) {

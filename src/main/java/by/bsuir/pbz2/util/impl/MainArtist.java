@@ -1,10 +1,10 @@
 package by.bsuir.pbz2.util.impl;
 
-import by.bsuir.pbz2.data.ArtistDao;
+import by.bsuir.pbz2.data.dao.ArtistDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
 import by.bsuir.pbz2.data.entity.Artist;
-import by.bsuir.pbz2.data.impl.ArtistDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.ArtistDaoImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 
 import java.time.LocalDate;

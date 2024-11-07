@@ -1,10 +1,11 @@
-package by.bsuir.pbz2.data.impl;
+package by.bsuir.pbz2.data.dao.impl;
 
-import by.bsuir.pbz2.data.ExhibitionDao;
-import by.bsuir.pbz2.data.ExhibitionHallDao;
 import by.bsuir.pbz2.data.connection.DataSource;
+import by.bsuir.pbz2.data.dao.ExhibitionDao;
+import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.entity.Exhibition;
 import by.bsuir.pbz2.data.entity.enums.ExhibitionType;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -15,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ExhibitionDaoImpl implements ExhibitionDao {
     private final DataSource dataSource;
     private static final String CREATION_QUERY = "INSERT INTO exhibitions " +
@@ -37,9 +39,6 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
             "WHERE id = ?";
     private static final String DELETE_QUERY = "DELETE FROM exhibitions WHERE id = ?";
 
-    public ExhibitionDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public Exhibition create(Exhibition entity) {

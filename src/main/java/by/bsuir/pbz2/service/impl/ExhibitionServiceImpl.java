@@ -1,18 +1,17 @@
 package by.bsuir.pbz2.service.impl;
 
-import by.bsuir.pbz2.data.ExhibitionDao;
+import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.entity.Exhibition;
 import by.bsuir.pbz2.service.ExhibitionService;
 import by.bsuir.pbz2.service.dto.ExhibitionDto;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ExhibitionServiceImpl implements ExhibitionService {
     private final ExhibitionDao exhibitionDao;
 
-    public ExhibitionServiceImpl(ExhibitionDao exhibitionDao) {
-        this.exhibitionDao = exhibitionDao;
-    }
 
     private Exhibition toExhibitionEntity(ExhibitionDto dto) {
         Exhibition exhibition = new Exhibition();

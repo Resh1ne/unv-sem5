@@ -1,13 +1,13 @@
 package by.bsuir.pbz2.util.impl;
 
-import by.bsuir.pbz2.data.ExhibitionDao;
-import by.bsuir.pbz2.data.ExhibitionHallDao;
+import by.bsuir.pbz2.data.dao.ExhibitionDao;
+import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
 import by.bsuir.pbz2.data.entity.Exhibition;
 import by.bsuir.pbz2.data.entity.enums.ExhibitionType;
-import by.bsuir.pbz2.data.impl.ExhibitionDaoImpl;
-import by.bsuir.pbz2.data.impl.ExhibitionHallDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.ExhibitionDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.ExhibitionHallDaoImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 
 import java.time.LocalDate;
