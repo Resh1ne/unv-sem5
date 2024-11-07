@@ -1,20 +1,20 @@
 CREATE TABLE exhibition_types (
     id BIGSERIAL PRIMARY KEY,
-    exhibition_type VARCHAR(50),
+    exhibition_type VARCHAR(50) NOT NULL,
 	CONSTRAINT unique_exhibition_type_name UNIQUE (exhibition_type)
 );
 
 
 CREATE TABLE owner_types (
     id BIGSERIAL PRIMARY KEY,
-    owner_type VARCHAR(50),
+    owner_type VARCHAR(50) NOT NULL,
 	CONSTRAINT unique_owner_type_name UNIQUE (owner_type)
 );
 
 
 CREATE TABLE execution_types (
     id BIGSERIAL PRIMARY KEY,
-    execution VARCHAR(50),
+    execution VARCHAR(50) NOT NULL,
 	CONSTRAINT unique_execution_type_name UNIQUE (execution)
 );
 
@@ -23,8 +23,7 @@ CREATE TABLE owners (
     name VARCHAR(100) NOT NULL,
     address VARCHAR(255),
     phone VARCHAR(20),
-    type_id INT REFERENCES owner_type
-    CONSTRAINT fk_owner_type FOREIGN KEY (type_id) REFERENCES owner_types(id) ON DELETE CASCADE ON UPDATE CASCADE
+    type_id INT REFERENCES owner_types
 );
 
 CREATE TABLE exhibition_halls (
@@ -41,8 +40,9 @@ CREATE TABLE exhibitions (
     name VARCHAR(100) NOT NULL,
     hall_id INT REFERENCES exhibition_halls,
     type_id INT REFERENCES exhibition_types,
-    start_date DATE,
-    end_date DATE
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    CONSTRAINT chk_end_date_greater_than_start_date CHECK (end_date >= start_date)
 );
 
 CREATE INDEX idx_exhibition_dates ON exhibitions (start_date, end_date);
@@ -129,3 +129,61 @@ VALUES
     (1, 1),
     (2, 2),
     (3, 3);
+
+---------------------------------
+CREATE OR REPLACE FUNCTION set_creation_date()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.creation_date IS NULL THEN
+        NEW.creation_date := CURRENT_DATE;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER before_insert_artworks
+BEFORE INSERT ON artworks
+FOR EACH ROW
+EXECUTE FUNCTION set_creation_date();
+---------------------------------
+CREATE OR REPLACE FUNCTION get_current_exhibitions(cur_date DATE)
+RETURNS TABLE(exhibition_name VARCHAR, hall_address VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT e.name AS exhibition_name, h.address AS hall_address
+    FROM exhibitions e
+    JOIN exhibition_halls h ON e.hall_id = h.id
+    WHERE cur_date BETWEEN e.start_date AND e.end_date;
+END;
+$$ LANGUAGE plpgsql;
+---------------------------------
+CREATE OR REPLACE PROCEDURE add_artwork_to_exhibition(
+    p_exhibition_id INT,
+    p_artwork_id INT
+)
+LANGUAGE plpgsql AS $$
+DECLARE
+    conflict_count INT;
+BEGIN
+    -- Проверяем, есть ли конфликты с другими выставками
+    SELECT COUNT(*)
+    INTO conflict_count
+    FROM artwork_exhibitions ae
+    JOIN exhibitions e ON ae.exhibition_id = e.id
+    WHERE ae.artwork_id = p_artwork_id
+    AND (
+        (e.start_date < (SELECT end_date FROM exhibitions WHERE id = p_exhibition_id) AND e.end_date > (SELECT start_date FROM exhibitions WHERE id = p_exhibition_id))
+    );
+
+    -- Если конфликты отсутствуют, добавляем запись
+    IF conflict_count = 0 THEN
+        INSERT INTO artwork_exhibitions (exhibition_id, artwork_id)
+        VALUES (p_exhibition_id, p_artwork_id);
+    ELSE
+        RAISE EXCEPTION 'Artwork % is already displayed in another exhibition during the same period.', p_artwork_id;
+    END IF;
+END;
+$$;
+---------------------------------
+
+
