@@ -4,8 +4,11 @@ import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.entity.Exhibition;
+import by.bsuir.pbz2.data.entity.ExhibitionParticipantsAndArtworks;
+import by.bsuir.pbz2.data.entity.enums.ExecutionType;
 import by.bsuir.pbz2.data.entity.enums.ExhibitionType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -16,6 +19,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 public class ExhibitionDaoImpl implements ExhibitionDao {
     private final DataSource dataSource;
@@ -29,6 +33,10 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
     private static final String FIND_ALL_QUERY = "SELECT e.id, e.name, e.hall_id, et.exhibition_type, e.start_date, e.end_date " +
             "FROM exhibitions e " +
             "JOIN exhibition_types et ON e.type_id = et.id ";
+
+    private static final String FIND_PARTICIPANTS_ARTWORKS_BY_EXHIBITION_ID = "SELECT " +
+            "exhibition_name, exhibition_start_date, exhibition_end_date, artwork_title, execution_type, artist_name, artist_age, creation_date " +
+            "FROM get_exhibition_participants_and_artworks(?)";
     private static final String UPDATE_QUERY = "UPDATE exhibitions " +
             "SET " +
             "name = ?, " +
@@ -74,6 +82,31 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public List<ExhibitionParticipantsAndArtworks> findParticipantsArtworksByExhibitionId(Long id) {
+        List<ExhibitionParticipantsAndArtworks> exhibitionParticipantsAndArtworks = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(FIND_PARTICIPANTS_ARTWORKS_BY_EXHIBITION_ID);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                ExhibitionParticipantsAndArtworks exhibition = new ExhibitionParticipantsAndArtworks();
+                exhibition.setExhibitionName(resultSet.getString("exhibition_name"));
+                exhibition.setExhibitionStartDate(resultSet.getDate("exhibition_start_date").toLocalDate());
+                exhibition.setExhibitionEndDate(resultSet.getDate("exhibition_end_date").toLocalDate());
+                exhibition.setArtworkTitle(resultSet.getString("artwork_title"));
+                exhibition.setExecutionType(ExecutionType.valueOf(resultSet.getString("execution_type")));
+                exhibition.setArtistName(resultSet.getString("artist_name"));
+                exhibition.setArtistAge(resultSet.getInt("artist_age"));
+                exhibition.setCreationDate(resultSet.getDate("creation_date").toLocalDate());
+                exhibitionParticipantsAndArtworks.add(exhibition);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return exhibitionParticipantsAndArtworks;
     }
 
     private Exhibition mapRow(ResultSet resultSet) throws SQLException {

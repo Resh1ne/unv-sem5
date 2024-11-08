@@ -5,6 +5,7 @@ import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
 import by.bsuir.pbz2.data.entity.Exhibition;
+import by.bsuir.pbz2.data.entity.ExhibitionParticipantsAndArtworks;
 import by.bsuir.pbz2.data.entity.enums.ExhibitionType;
 import by.bsuir.pbz2.data.dao.impl.ExhibitionDaoImpl;
 import by.bsuir.pbz2.data.dao.impl.ExhibitionHallDaoImpl;
@@ -56,6 +57,7 @@ public class MainExhibition {
     private static void printMenu() {
         String commandAll = "\u001B[35m" + "/all" + "\u001B[0m\n";
         String commandGet = "\u001B[35m" + "/get{id}" + "\u001B[0m\n";
+        String commandFindParAndArt = "\u001B[35m" + "/getParAndArt{id}" + "\u001B[0m\n";
         String commandDelete = "\u001B[35m" + "/delete{id}" + "\u001B[0m\n";
         String commandExit = "\u001B[35m" + "/exit" + "\u001B[0m\n";
         String commandCreate = "\u001B[35m" + "/create" + "\u001B[0m\n";
@@ -64,6 +66,7 @@ public class MainExhibition {
                 "~To view all exhibition, enter: " + commandAll +
                 "~To update the exhibition, enter: " + commandUpdate +
                 "~To display detailed information about the exhibition, enter: " + commandGet +
+                "~To display participant and artworks in exhibition, enter: " + commandFindParAndArt +
                 "~To delete exhibition, enter: " + commandDelete +
                 "~To create exhibition, enter: " + commandCreate +
                 "~To exit, enter: " + commandExit);
@@ -83,6 +86,11 @@ public class MainExhibition {
         } else if (id > 0 && "/get{}".equals(command)) {
             Exhibition exhibition = exhibitionDao.findById(id);
             System.out.println(exhibition);
+        } else if (id > 0 && "/getParAndArt{}".equals(command)) {
+            List<ExhibitionParticipantsAndArtworks> exhibitions = exhibitionDao.findParticipantsArtworksByExhibitionId(id);
+            for (ExhibitionParticipantsAndArtworks exhibition : exhibitions) {
+                System.out.println(exhibition.toString());
+            }
         } else if (id > 0 && "/delete{}".equals(command)) {
             boolean deleted = exhibitionDao.delete(id);
             System.out.println(deleted);

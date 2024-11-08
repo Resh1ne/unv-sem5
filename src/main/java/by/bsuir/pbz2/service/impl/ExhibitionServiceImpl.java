@@ -2,8 +2,10 @@ package by.bsuir.pbz2.service.impl;
 
 import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.entity.Exhibition;
+import by.bsuir.pbz2.data.entity.ExhibitionParticipantsAndArtworks;
 import by.bsuir.pbz2.service.ExhibitionService;
 import by.bsuir.pbz2.service.dto.ExhibitionDto;
+import by.bsuir.pbz2.service.dto.ExhibitionParticipantsAndArtworksDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -12,6 +14,26 @@ import java.util.List;
 public class ExhibitionServiceImpl implements ExhibitionService {
     private final ExhibitionDao exhibitionDao;
 
+    @Override
+    public List<ExhibitionParticipantsAndArtworksDto> getParticipantsArtworksByExhibitionId(Long id) {
+        return exhibitionDao.findParticipantsArtworksByExhibitionId(id)
+                .stream()
+                .map(this::toExhibitionParticipantsAndArtworksDto)
+                .toList();
+    }
+
+    private ExhibitionParticipantsAndArtworksDto toExhibitionParticipantsAndArtworksDto(ExhibitionParticipantsAndArtworks entity) {
+        ExhibitionParticipantsAndArtworksDto exhibitionDto = new ExhibitionParticipantsAndArtworksDto();
+        exhibitionDto.setExhibitionName(entity.getExhibitionName());
+        exhibitionDto.setExhibitionStartDate(entity.getExhibitionStartDate());
+        exhibitionDto.setExhibitionEndDate(entity.getExhibitionEndDate());
+        exhibitionDto.setArtworkTitle(entity.getArtworkTitle());
+        exhibitionDto.setExecutionType(entity.getExecutionType());
+        exhibitionDto.setArtistName(entity.getArtistName());
+        exhibitionDto.setArtistAge(entity.getArtistAge());
+        exhibitionDto.setCreationDate(entity.getCreationDate());
+        return exhibitionDto;
+    }
 
     private Exhibition toExhibitionEntity(ExhibitionDto dto) {
         Exhibition exhibition = new Exhibition();
