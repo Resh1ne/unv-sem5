@@ -4,6 +4,7 @@ import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
+import by.bsuir.pbz2.data.entity.CurrentExhibition;
 import by.bsuir.pbz2.data.entity.Exhibition;
 import by.bsuir.pbz2.data.entity.ExhibitionParticipantsAndArtworks;
 import by.bsuir.pbz2.data.entity.enums.ExhibitionType;
@@ -58,6 +59,7 @@ public class MainExhibition {
         String commandAll = "\u001B[35m" + "/all" + "\u001B[0m\n";
         String commandGet = "\u001B[35m" + "/get{id}" + "\u001B[0m\n";
         String commandFindParAndArt = "\u001B[35m" + "/getParAndArt{id}" + "\u001B[0m\n";
+        String commandGetCurExhibition = "\u001B[35m" + "/getCurExh" + "\u001B[0m\n";
         String commandDelete = "\u001B[35m" + "/delete{id}" + "\u001B[0m\n";
         String commandExit = "\u001B[35m" + "/exit" + "\u001B[0m\n";
         String commandCreate = "\u001B[35m" + "/create" + "\u001B[0m\n";
@@ -67,6 +69,7 @@ public class MainExhibition {
                 "~To update the exhibition, enter: " + commandUpdate +
                 "~To display detailed information about the exhibition, enter: " + commandGet +
                 "~To display participant and artworks in exhibition, enter: " + commandFindParAndArt +
+                "~To display current exhibition, enter: " + commandGetCurExhibition +
                 "~To delete exhibition, enter: " + commandDelete +
                 "~To create exhibition, enter: " + commandCreate +
                 "~To exit, enter: " + commandExit);
@@ -79,6 +82,11 @@ public class MainExhibition {
         } else if (userInput.equals("/all")) {
             List<Exhibition> exhibitions = exhibitionDao.findAll();
             for (Exhibition exhibition : exhibitions) {
+                System.out.println(exhibition.toString());
+            }
+        } else if (userInput.equals("/getCurExh")) {
+            List<CurrentExhibition> exhibitions = exhibitionDao.findCurrentExhibition();
+            for (CurrentExhibition exhibition : exhibitions) {
                 System.out.println(exhibition.toString());
             }
         } else if (userInput.equals("/exit")) {

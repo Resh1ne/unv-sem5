@@ -3,6 +3,7 @@ package by.bsuir.pbz2.data.dao.impl;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
+import by.bsuir.pbz2.data.entity.CurrentExhibition;
 import by.bsuir.pbz2.data.entity.Exhibition;
 import by.bsuir.pbz2.data.entity.ExhibitionParticipantsAndArtworks;
 import by.bsuir.pbz2.data.entity.enums.ExecutionType;
@@ -37,6 +38,8 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
     private static final String FIND_PARTICIPANTS_ARTWORKS_BY_EXHIBITION_ID = "SELECT " +
             "exhibition_name, exhibition_start_date, exhibition_end_date, artwork_title, execution_type, artist_name, artist_age, creation_date " +
             "FROM get_exhibition_participants_and_artworks(?)";
+
+    private static final String FIND_CURRENT_EXHIBITION = "SELECT exhibition_name, hall_address FROM get_current_exhibitions(CURRENT_DATE)";
     private static final String UPDATE_QUERY = "UPDATE exhibitions " +
             "SET " +
             "name = ?, " +
@@ -107,6 +110,24 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
             throw new RuntimeException(e);
         }
         return exhibitionParticipantsAndArtworks;
+    }
+
+    @Override
+    public List<CurrentExhibition> findCurrentExhibition() {
+        List<CurrentExhibition> exhibitions = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(FIND_CURRENT_EXHIBITION);
+            while (resultSet.next()) {
+                CurrentExhibition exhibition = new CurrentExhibition();
+                exhibition.setExhibitionName(resultSet.getString("exhibition_name"));
+                exhibition.setHallAddress(resultSet.getString("hall_address"));
+                exhibitions.add(exhibition);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return exhibitions;
     }
 
     private Exhibition mapRow(ResultSet resultSet) throws SQLException {

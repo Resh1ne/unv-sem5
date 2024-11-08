@@ -1,9 +1,11 @@
 package by.bsuir.pbz2.service.impl;
 
 import by.bsuir.pbz2.data.dao.ExhibitionDao;
+import by.bsuir.pbz2.data.entity.CurrentExhibition;
 import by.bsuir.pbz2.data.entity.Exhibition;
 import by.bsuir.pbz2.data.entity.ExhibitionParticipantsAndArtworks;
 import by.bsuir.pbz2.service.ExhibitionService;
+import by.bsuir.pbz2.service.dto.CurrentExhibitionDto;
 import by.bsuir.pbz2.service.dto.ExhibitionDto;
 import by.bsuir.pbz2.service.dto.ExhibitionParticipantsAndArtworksDto;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +17,26 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     private final ExhibitionDao exhibitionDao;
 
     @Override
+    public List<CurrentExhibitionDto> getCurrentExhibition() {
+        return exhibitionDao.findCurrentExhibition()
+                .stream()
+                .map(this::toCurrentExhibitionDto)
+                .toList();
+    }
+
+    @Override
     public List<ExhibitionParticipantsAndArtworksDto> getParticipantsArtworksByExhibitionId(Long id) {
         return exhibitionDao.findParticipantsArtworksByExhibitionId(id)
                 .stream()
                 .map(this::toExhibitionParticipantsAndArtworksDto)
                 .toList();
+    }
+
+    private CurrentExhibitionDto toCurrentExhibitionDto(CurrentExhibition entity) {
+        CurrentExhibitionDto exhibitionDto = new CurrentExhibitionDto();
+        exhibitionDto.setExhibitionName(entity.getExhibitionName());
+        exhibitionDto.setHallAddress(entity.getHallAddress());
+        return exhibitionDto;
     }
 
     private ExhibitionParticipantsAndArtworksDto toExhibitionParticipantsAndArtworksDto(ExhibitionParticipantsAndArtworks entity) {
