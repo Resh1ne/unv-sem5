@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArtworkExhibitionDaoImpl implements ArtworkExhibitionDao {
     private final DataSource dataSource;
-    private static final String CREATION_QUERY = "INSERT INTO artwork_exhibitions (exhibition_id, artwork_id) VALUES (?, ?)";
+    private static final String CREATION_QUERY = "CALL add_artwork_to_exhibition(?, ?)";
     private static final String FIND_BY_EXHIBITION_ARTWORK_ID_QUERY = "SELECT exhibition_id, artwork_id " +
             "FROM artwork_exhibitions WHERE exhibition_id = ? AND artwork_id = ?";
     private static final String FIND_ALL_QUERY = "SELECT exhibition_id, artwork_id FROM artwork_exhibitions";
@@ -29,14 +29,12 @@ public class ArtworkExhibitionDaoImpl implements ArtworkExhibitionDao {
 
 
     @Override
-    public boolean create(ArtworkExhibition artworkExhibition) {
+    public void create(ArtworkExhibition artworkExhibition) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(CREATION_QUERY);
             statement.setLong(1, artworkExhibition.getExhibitionId().getId());
             statement.setLong(2, artworkExhibition.getArtworkId().getId());
-            int rowsAffected = statement.executeUpdate();
-
-            return rowsAffected > 0;
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Can't create ArtworkExhibition: " + artworkExhibition + "\n" + e);
         }

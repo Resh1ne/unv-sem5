@@ -7,7 +7,7 @@ import by.bsuir.pbz2.data.entity.Exhibition;
 import java.util.List;
 
 public interface ArtworkExhibitionDao {
-    boolean create(ArtworkExhibition artworkExhibition);
+    void create(ArtworkExhibition artworkExhibition);
 
     ArtworkExhibition findByExhibitionArtworkId(Artwork artworkId, Exhibition exhibitionId);
 
