@@ -158,8 +158,8 @@ END;
 $$ LANGUAGE plpgsql;
 ---------------------------------
 CREATE OR REPLACE PROCEDURE add_artwork_to_exhibition(
-    p_exhibition_id INT,
-    p_artwork_id INT
+    p_exhibition_id BIGINT,
+    p_artwork_id BIGINT
 )
 LANGUAGE plpgsql AS $$
 DECLARE
@@ -185,5 +185,3 @@ BEGIN
 END;
 $$;
 ---------------------------------
-
-
