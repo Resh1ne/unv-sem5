@@ -23,7 +23,8 @@ public class MainExhibition {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Pattern pattern = Pattern.compile("\\d+");
-        ExhibitionDao exhibitionDao = getExhibitionDao();
+        DataSource dataSource = createDataSource();
+        ExhibitionDao exhibitionDao = new ExhibitionDaoImpl(dataSource);
 
         while (true) {
             printMenu();
@@ -38,21 +39,19 @@ public class MainExhibition {
                 command = matcher.replaceAll("");
             }
 
-            if (!usingMenu(userInput, id, command, scanner, exhibitionDao)) {
+            if (!usingMenu(userInput, id, command, scanner, exhibitionDao, dataSource)) {
                 return;
             }
         }
     }
-
-    private static ExhibitionDao getExhibitionDao() {
+    private static DataSource createDataSource() {
         PropertiesManager propertiesManager = new PropertiesManagerImpl("src\\main\\resources\\app.properties");
         String profile = propertiesManager.getKey("my.app.profile");
         String url = propertiesManager.getKey("my.app.db." + profile + ".url");
         String user = propertiesManager.getKey("my.app.db." + profile + ".user");
         String password = propertiesManager.getKey("my.app.db." + profile + ".password");
         String driver = propertiesManager.getKey("my.app.db." + profile + ".driver");
-        DataSource dataSource = new DataSourceImpl(password, user, url, driver);
-        return new ExhibitionDaoImpl(dataSource);
+        return new DataSourceImpl(password, user, url, driver);
     }
 
     private static void printMenu() {
@@ -75,9 +74,9 @@ public class MainExhibition {
                 "~To exit, enter: " + commandExit);
     }
 
-    private static boolean usingMenu(String userInput, Long id, String command, Scanner scanner, ExhibitionDao exhibitionDao) {
+    private static boolean usingMenu(String userInput, Long id, String command, Scanner scanner, ExhibitionDao exhibitionDao, DataSource dataSource) {
         if (id > 0 && "/update{}".equals(command)) {
-            Exhibition exhibition = updateExhibition(scanner, exhibitionDao, id);
+            Exhibition exhibition = updateExhibition(scanner, exhibitionDao, id, dataSource);
             System.out.println(exhibitionDao.update(exhibition).toString());
         } else if (userInput.equals("/all")) {
             List<Exhibition> exhibitions = exhibitionDao.findAll();
@@ -103,7 +102,7 @@ public class MainExhibition {
             boolean deleted = exhibitionDao.delete(id);
             System.out.println(deleted);
         } else if (userInput.equals("/create")) {
-            Exhibition exhibition = createExhibitionWithoutID(scanner);
+            Exhibition exhibition = createExhibitionWithoutID(scanner, dataSource);
             Exhibition createdExhibition = exhibitionDao.create(exhibition);
             System.out.println(createdExhibition.toString());
         } else {
@@ -112,7 +111,7 @@ public class MainExhibition {
         return true;
     }
 
-    private static Exhibition updateExhibition(Scanner scanner, ExhibitionDao exhibitionDao, long id) {
+    private static Exhibition updateExhibition(Scanner scanner, ExhibitionDao exhibitionDao, long id, DataSource dataSource) {
         while (true) {
             if (exhibitionDao.findById(id) == null) {
                 System.out.println("There is no exhibition with this id! Enter it again!");
@@ -123,15 +122,15 @@ public class MainExhibition {
             }
             break;
         }
-        Exhibition exhibition = createExhibitionWithoutID(scanner);
+        Exhibition exhibition = createExhibitionWithoutID(scanner, dataSource);
         exhibition.setId(id);
         return exhibition;
     }
 
-    private static Exhibition createExhibitionWithoutID(Scanner scanner) {
+    private static Exhibition createExhibitionWithoutID(Scanner scanner, DataSource dataSource) {
         Exhibition exhibition = new Exhibition();
         setName(scanner, exhibition);
-        setExhibitionHall(scanner, exhibition);
+        setExhibitionHall(scanner, exhibition, dataSource);
         setExhibitionType(scanner, exhibition);
         setStartDate(scanner, exhibition);
         setEndDate(scanner, exhibition);
@@ -143,8 +142,8 @@ public class MainExhibition {
         exhibition.setName(scanner.nextLine());
     }
 
-    private static void setExhibitionHall(Scanner scanner, Exhibition exhibition) {
-        ExhibitionHallDao exhibitionHallDao = getExhibitionHallDao();
+    private static void setExhibitionHall(Scanner scanner, Exhibition exhibition, DataSource dataSource) {
+        ExhibitionHallDao exhibitionHallDao = new ExhibitionHallDaoImpl(dataSource);
         System.out.print("Enter the exhibition hall id of the exhibition(Enter exhibition hall id): ");
         exhibition.setHallId(exhibitionHallDao.findById(scanner.nextLong()));
     }
@@ -181,16 +180,5 @@ public class MainExhibition {
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please enter the date in the format yyyy-MM-dd.");
         }
-    }
-
-    private static ExhibitionHallDao getExhibitionHallDao() {
-        PropertiesManager propertiesManager = new PropertiesManagerImpl("src\\main\\resources\\app.properties");
-        String profile = propertiesManager.getKey("my.app.profile");
-        String url = propertiesManager.getKey("my.app.db." + profile + ".url");
-        String user = propertiesManager.getKey("my.app.db." + profile + ".user");
-        String password = propertiesManager.getKey("my.app.db." + profile + ".password");
-        String driver = propertiesManager.getKey("my.app.db." + profile + ".driver");
-        DataSource dataSource = new DataSourceImpl(password, user, url, driver);
-        return new ExhibitionHallDaoImpl(dataSource);
     }
 }
