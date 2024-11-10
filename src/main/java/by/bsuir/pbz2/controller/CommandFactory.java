@@ -1,7 +1,12 @@
 package by.bsuir.pbz2.controller;
 
+import by.bsuir.pbz2.controller.impl.ExhibitionHallsCommand;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
+import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
+import by.bsuir.pbz2.data.dao.impl.ExhibitionHallDaoImpl;
+import by.bsuir.pbz2.service.ExhibitionHallService;
+import by.bsuir.pbz2.service.impl.ExhibitionHallServiceImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 import by.bsuir.pbz2.util.impl.PropertiesManagerImpl;
 import lombok.extern.log4j.Log4j2;
@@ -24,7 +29,11 @@ public class CommandFactory implements Closeable {
         closeables = new ArrayList<>();
         closeables.add(dataSource);
 
+        ExhibitionHallDao exhibitionHallDao = new ExhibitionHallDaoImpl(dataSource);
+        ExhibitionHallService exhibitionHallService = new ExhibitionHallServiceImpl(exhibitionHallDao);
+
         controllers = new HashMap<>();
+        controllers.put("exhibition_halls", new ExhibitionHallsCommand(exhibitionHallService));
     }
 
     private static DataSource getDataSource() {
