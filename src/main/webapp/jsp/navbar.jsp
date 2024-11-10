@@ -4,5 +4,5 @@
   <li><a class="navbar_style" href="controller?command=exhibitions">All exhibitions</a></li>
   <li><a class="navbar_style" href="controller?command=cur_exhibitions">Current exhibitions</a></li>
   <li><a class="navbar_style" href="controller?command=owners">All owners</a></li>
-  <li><a class="navbar_style" href="controller?command=create_book_form">Create book</a></li>
+  <li><a class="navbar_style" href="controller?command=artists">All artists</a></li>
 </ul>

@@ -1,5 +1,7 @@
 package by.bsuir.pbz2.controller;
 
+import by.bsuir.pbz2.controller.impl.ArtistCommand;
+import by.bsuir.pbz2.controller.impl.ArtistsCommand;
 import by.bsuir.pbz2.controller.impl.CurExhibitionsCommand;
 import by.bsuir.pbz2.controller.impl.ErrorCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionCommand;
@@ -11,15 +13,19 @@ import by.bsuir.pbz2.controller.impl.OwnerCommand;
 import by.bsuir.pbz2.controller.impl.OwnersCommand;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
+import by.bsuir.pbz2.data.dao.ArtistDao;
 import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.dao.OwnerDao;
+import by.bsuir.pbz2.data.dao.impl.ArtistDaoImpl;
 import by.bsuir.pbz2.data.dao.impl.ExhibitionDaoImpl;
 import by.bsuir.pbz2.data.dao.impl.ExhibitionHallDaoImpl;
 import by.bsuir.pbz2.data.dao.impl.OwnerDaoImpl;
+import by.bsuir.pbz2.service.ArtistService;
 import by.bsuir.pbz2.service.ExhibitionHallService;
 import by.bsuir.pbz2.service.ExhibitionService;
 import by.bsuir.pbz2.service.OwnerService;
+import by.bsuir.pbz2.service.impl.ArtistServiceImpl;
 import by.bsuir.pbz2.service.impl.ExhibitionHallServiceImpl;
 import by.bsuir.pbz2.service.impl.ExhibitionServiceImpl;
 import by.bsuir.pbz2.service.impl.OwnerServiceImpl;
@@ -51,6 +57,8 @@ public class CommandFactory implements Closeable {
         ExhibitionService exhibitionService = new ExhibitionServiceImpl(exhibitionDao);
         OwnerDao ownerDao = new OwnerDaoImpl(dataSource);
         OwnerService ownerService = new OwnerServiceImpl(ownerDao);
+        ArtistDao artistDao = new ArtistDaoImpl(dataSource);
+        ArtistService artistService = new ArtistServiceImpl(artistDao);
 
         controllers = new HashMap<>();
         controllers.put("error", new ErrorCommand());
@@ -62,6 +70,8 @@ public class CommandFactory implements Closeable {
         controllers.put("cur_exhibitions", new CurExhibitionsCommand(exhibitionService));
         controllers.put("owners", new OwnersCommand(ownerService));
         controllers.put("owner", new OwnerCommand(ownerService));
+        controllers.put("artists", new ArtistsCommand(artistService));
+        controllers.put("artist", new ArtistCommand(artistService));
     }
 
     private static DataSource getDataSource() {
