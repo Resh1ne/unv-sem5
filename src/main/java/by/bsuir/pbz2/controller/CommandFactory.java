@@ -7,16 +7,21 @@ import by.bsuir.pbz2.controller.impl.ExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionHallsCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionParAndArtCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionsCommand;
+import by.bsuir.pbz2.controller.impl.OwnersCommand;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
 import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
+import by.bsuir.pbz2.data.dao.OwnerDao;
 import by.bsuir.pbz2.data.dao.impl.ExhibitionDaoImpl;
 import by.bsuir.pbz2.data.dao.impl.ExhibitionHallDaoImpl;
+import by.bsuir.pbz2.data.dao.impl.OwnerDaoImpl;
 import by.bsuir.pbz2.service.ExhibitionHallService;
 import by.bsuir.pbz2.service.ExhibitionService;
+import by.bsuir.pbz2.service.OwnerService;
 import by.bsuir.pbz2.service.impl.ExhibitionHallServiceImpl;
 import by.bsuir.pbz2.service.impl.ExhibitionServiceImpl;
+import by.bsuir.pbz2.service.impl.OwnerServiceImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 import by.bsuir.pbz2.util.impl.PropertiesManagerImpl;
 import lombok.extern.log4j.Log4j2;
@@ -43,6 +48,8 @@ public class CommandFactory implements Closeable {
         ExhibitionHallService exhibitionHallService = new ExhibitionHallServiceImpl(exhibitionHallDao);
         ExhibitionDao exhibitionDao = new ExhibitionDaoImpl(dataSource);
         ExhibitionService exhibitionService = new ExhibitionServiceImpl(exhibitionDao);
+        OwnerDao ownerDao = new OwnerDaoImpl(dataSource);
+        OwnerService ownerService = new OwnerServiceImpl(ownerDao);
 
         controllers = new HashMap<>();
         controllers.put("error", new ErrorCommand());
@@ -52,6 +59,7 @@ public class CommandFactory implements Closeable {
         controllers.put("exhibition", new ExhibitionCommand(exhibitionService));
         controllers.put("exhibition_par_and_art", new ExhibitionParAndArtCommand(exhibitionService));
         controllers.put("cur_exhibitions", new CurExhibitionsCommand(exhibitionService));
+        controllers.put("owners", new OwnersCommand(ownerService));
     }
 
     private static DataSource getDataSource() {
