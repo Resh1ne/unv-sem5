@@ -5,4 +5,5 @@
   <li><a class="navbar_style" href="controller?command=cur_exhibitions">Current exhibitions</a></li>
   <li><a class="navbar_style" href="controller?command=owners">All owners</a></li>
   <li><a class="navbar_style" href="controller?command=artists">All artists</a></li>
+  <li><a class="navbar_style" href="controller?command=artworks">All artworks</a></li>
 </ul>
