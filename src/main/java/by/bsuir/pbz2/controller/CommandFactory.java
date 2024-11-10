@@ -3,6 +3,7 @@ package by.bsuir.pbz2.controller;
 import by.bsuir.pbz2.controller.impl.CurExhibitionsCommand;
 import by.bsuir.pbz2.controller.impl.ErrorCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionCommand;
+import by.bsuir.pbz2.controller.impl.ExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionHallsCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionParAndArtCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionsCommand;
@@ -46,6 +47,7 @@ public class CommandFactory implements Closeable {
         controllers = new HashMap<>();
         controllers.put("error", new ErrorCommand());
         controllers.put("exhibition_halls", new ExhibitionHallsCommand(exhibitionHallService));
+        controllers.put("exhibition_hall", new ExhibitionHallCommand(exhibitionHallService));
         controllers.put("exhibitions", new ExhibitionsCommand(exhibitionService));
         controllers.put("exhibition", new ExhibitionCommand(exhibitionService));
         controllers.put("exhibition_par_and_art", new ExhibitionParAndArtCommand(exhibitionService));
