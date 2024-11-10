@@ -15,6 +15,6 @@ public class ExhibitionHallsCommand implements Command {
     public String execute(HttpServletRequest req) {
         List<ExhibitionHallDto> exhibitionHalls = exhibitionHallService.getAll();
         req.setAttribute("exhibition_halls", exhibitionHalls);
-        return "jsp/exhibitionHall/exhibition_halls.jsp";
+        return "jsp/exhibition_hall/exhibition_halls.jsp";
     }
 }
