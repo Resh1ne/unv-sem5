@@ -1,12 +1,17 @@
 package by.bsuir.pbz2.controller;
 
 import by.bsuir.pbz2.controller.impl.ExhibitionHallsCommand;
+import by.bsuir.pbz2.controller.impl.ExhibitionsCommand;
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
+import by.bsuir.pbz2.data.dao.ExhibitionDao;
 import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
+import by.bsuir.pbz2.data.dao.impl.ExhibitionDaoImpl;
 import by.bsuir.pbz2.data.dao.impl.ExhibitionHallDaoImpl;
 import by.bsuir.pbz2.service.ExhibitionHallService;
+import by.bsuir.pbz2.service.ExhibitionService;
 import by.bsuir.pbz2.service.impl.ExhibitionHallServiceImpl;
+import by.bsuir.pbz2.service.impl.ExhibitionServiceImpl;
 import by.bsuir.pbz2.util.PropertiesManager;
 import by.bsuir.pbz2.util.impl.PropertiesManagerImpl;
 import lombok.extern.log4j.Log4j2;
@@ -31,9 +36,12 @@ public class CommandFactory implements Closeable {
 
         ExhibitionHallDao exhibitionHallDao = new ExhibitionHallDaoImpl(dataSource);
         ExhibitionHallService exhibitionHallService = new ExhibitionHallServiceImpl(exhibitionHallDao);
+        ExhibitionDao exhibitionDao = new ExhibitionDaoImpl(dataSource);
+        ExhibitionService exhibitionService = new ExhibitionServiceImpl(exhibitionDao);
 
         controllers = new HashMap<>();
         controllers.put("exhibition_halls", new ExhibitionHallsCommand(exhibitionHallService));
+        controllers.put("exhibitions", new ExhibitionsCommand(exhibitionService));
     }
 
     private static DataSource getDataSource() {
