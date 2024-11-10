@@ -24,7 +24,10 @@ uri="http://java.sun.com/jsp/jstl/core" %>
             <a href="controller?command=owner&id=${owner.id}">${owner.name}</a>
           </td>
           <td>
-            <a href="controller?command=edit_owner_form&id=${owner.id}">Edit</a>
+            <button class="action_button" onclick="window.location.href='controller?command=edit_owner_form&id=${owner.id}'">Edit</button>
+          </td>
+          <td>
+            <button class="action_button_delete" onclick="window.location.href='controller?command=delete_owner&id=${owner.id}'">Delete</button>
           </td>
         </tr>
       </c:forEach>

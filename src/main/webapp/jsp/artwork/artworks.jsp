@@ -26,7 +26,10 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           </td>
           <td>${artwork.artistId.name}</td>
           <td>
-            <a href="controller?command=edit_artwork_form&id=${artwork.id}">Edit</a>
+            <button class="action_button" onclick="window.location.href='controller?command=edit_artwork_form&id=${artwork.id}'">Edit</button>
+          </td>
+          <td>
+            <button class="action_button_delete" onclick="window.location.href='controller?command=delete_artwork&id=${artwork.id}'">Delete</button>
           </td>
         </tr>
       </c:forEach>
