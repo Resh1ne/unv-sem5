@@ -14,6 +14,9 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         <th>#</th>
         <th>Id</th>
         <th>Name</th>
+        <th>Address</th>
+        <th>Area</th>
+        <th>Owner</th>
       </tr>
 
       <c:forEach items="${exhibition_halls}" var="exhibition_hall" varStatus="counter">
@@ -23,6 +26,9 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           <td>
             <a href="controller?command=exhibition_hall&id=${exhibition_hall.id}">${exhibition_hall.name}</a>
           </td>
+          <td>${exhibition_hall.address}</td>
+          <td>${exhibition_hall.area}</td>
+          <td>${exhibition_hall.ownerId.name}</td>
           <td>
             <a href="controller?command=edit_exhibition_hall_form&id=${exhibition_hall.id}">Edit</a>
           </td>
