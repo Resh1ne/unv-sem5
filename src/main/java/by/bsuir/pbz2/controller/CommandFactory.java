@@ -1,5 +1,6 @@
 package by.bsuir.pbz2.controller;
 
+import by.bsuir.pbz2.controller.impl.ExhibitionCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionHallsCommand;
 import by.bsuir.pbz2.controller.impl.ExhibitionsCommand;
 import by.bsuir.pbz2.data.connection.DataSource;
@@ -42,6 +43,7 @@ public class CommandFactory implements Closeable {
         controllers = new HashMap<>();
         controllers.put("exhibition_halls", new ExhibitionHallsCommand(exhibitionHallService));
         controllers.put("exhibitions", new ExhibitionsCommand(exhibitionService));
+        controllers.put("exhibition", new ExhibitionCommand(exhibitionService));
     }
 
     private static DataSource getDataSource() {
