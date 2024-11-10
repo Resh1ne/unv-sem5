@@ -121,7 +121,7 @@ VALUES
 INSERT INTO artworks (title, execution_id, creation_date, height, width, volume, artist_id)
 VALUES
     ('Abstract Sunrise', 1, '2023-06-01', 100.00, 150.00, NULL, 1),
-    ('Modern Sculpture', 3, '2022-08-15', NULL, NULL, 300.00, 2),
+    ('Modern Sculpture', 2, '2022-08-15', 40.00, 60.00, NULL, 2),
     ('Nature in Watercolor', 2, '2024-02-20', 50.00, 70.00, NULL, 3);
 
 INSERT INTO artwork_exhibitions (exhibition_id, artwork_id)
