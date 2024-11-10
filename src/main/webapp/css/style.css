@@ -1,0 +1,16 @@
+body {
+  background-color: bisque;
+}
+
+a {
+  color: darkorchid;
+}
+
+.navbar_style {
+  color: #cf0c74;
+  font-size: 30px;
+}
+
+a:hover {
+  color: blue;
+}
