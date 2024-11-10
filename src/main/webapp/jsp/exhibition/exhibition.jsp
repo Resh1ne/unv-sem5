@@ -11,7 +11,7 @@
     <p>Title: ${exhibition.name}</p>
     <p>Start date: ${exhibition.startDate}</p>
     <p>End date: ${exhibition.endDate}</p>
-    <button class="favorite styled" type="button" onclick="window.location.href='controller?command=exhibitions'">
+    <button class="favorite styled" type="button" onclick="window.location.href='controller?command=exhibition_par_and_art&id=${exhibition.id}'">
         Display the Participants and Paintings of the exhibition
     </button>
   </body>
