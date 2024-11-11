@@ -34,6 +34,7 @@ public class ExhibitionHallServiceImpl implements ExhibitionHallService {
 
     private Owner toOwnerEntity(OwnerDto dto) {
         Owner owner = new Owner();
+        owner.setId(dto.getId());
         owner.setName(dto.getName());
         owner.setAddress(dto.getAddress());
         owner.setPhone(dto.getPhone());
