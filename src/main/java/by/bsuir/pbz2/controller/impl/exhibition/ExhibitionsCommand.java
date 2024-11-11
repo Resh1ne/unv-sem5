@@ -1,4 +1,4 @@
-package by.bsuir.pbz2.controller.impl;
+package by.bsuir.pbz2.controller.impl.exhibition;
 
 import by.bsuir.pbz2.controller.Command;
 import by.bsuir.pbz2.service.ExhibitionService;
