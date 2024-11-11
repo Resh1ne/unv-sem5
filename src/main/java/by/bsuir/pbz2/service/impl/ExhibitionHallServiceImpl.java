@@ -2,8 +2,10 @@ package by.bsuir.pbz2.service.impl;
 
 import by.bsuir.pbz2.data.dao.ExhibitionHallDao;
 import by.bsuir.pbz2.data.entity.ExhibitionHall;
+import by.bsuir.pbz2.data.entity.Owner;
 import by.bsuir.pbz2.service.ExhibitionHallService;
 import by.bsuir.pbz2.service.dto.ExhibitionHallDto;
+import by.bsuir.pbz2.service.dto.OwnerDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -26,8 +28,27 @@ public class ExhibitionHallServiceImpl implements ExhibitionHallService {
         exhibitionHall.setArea(dto.getArea());
         exhibitionHall.setAddress(dto.getAddress());
         exhibitionHall.setPhone(dto.getPhone());
-        exhibitionHall.setOwnerId(dto.getOwnerId());
+        exhibitionHall.setOwnerId(toOwnerEntity(dto.getOwnerId()));
         return exhibitionHall;
+    }
+
+    private Owner toOwnerEntity(OwnerDto dto) {
+        Owner owner = new Owner();
+        owner.setName(dto.getName());
+        owner.setAddress(dto.getAddress());
+        owner.setPhone(dto.getPhone());
+        owner.setOwnerType(dto.getOwnerType());
+        return owner;
+    }
+
+    private OwnerDto toOwnerDto(Owner entity) {
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setId(entity.getId());
+        ownerDto.setName(entity.getName());
+        ownerDto.setAddress(entity.getAddress());
+        ownerDto.setPhone(entity.getPhone());
+        ownerDto.setOwnerType(entity.getOwnerType());
+        return ownerDto;
     }
 
     private ExhibitionHallDto toExhibitionHallDto(ExhibitionHall entity) {
@@ -37,7 +58,7 @@ public class ExhibitionHallServiceImpl implements ExhibitionHallService {
         exhibitionHallDto.setArea(entity.getArea());
         exhibitionHallDto.setAddress(entity.getAddress());
         exhibitionHallDto.setPhone(entity.getPhone());
-        exhibitionHallDto.setOwnerId(entity.getOwnerId());
+        exhibitionHallDto.setOwnerId(toOwnerDto(entity.getOwnerId()));
         return exhibitionHallDto;
     }
 
