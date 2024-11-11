@@ -9,6 +9,7 @@ import by.bsuir.pbz2.controller.impl.exhibition_hall.CreateExhibitionHallFormCom
 import by.bsuir.pbz2.controller.impl.exhibition.CurExhibitionsCommand;
 import by.bsuir.pbz2.controller.impl.ErrorCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.ExhibitionCommand;
+import by.bsuir.pbz2.controller.impl.exhibition_hall.DeleteExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.EditExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.EditExhibitionHallFormCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.ExhibitionHallCommand;
@@ -90,6 +91,7 @@ public class CommandFactory implements Closeable {
         controllers.put("create_exhibition_hall", new CreateExhibitionHallCommand(exhibitionHallService, ownerService));
         controllers.put("edit_exhibition_hall_form", new EditExhibitionHallFormCommand(exhibitionHallService, ownerService));
         controllers.put("edit_exhibition_hall", new EditExhibitionHallCommand(exhibitionHallService, ownerService));
+        controllers.put("delete_exhibition_hall", new DeleteExhibitionHallCommand(exhibitionHallService));
     }
 
     private static DataSource getDataSource() {
