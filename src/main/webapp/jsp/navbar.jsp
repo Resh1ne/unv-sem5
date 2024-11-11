@@ -17,11 +17,11 @@
   <button class="navbar_button" onclick="navigateTo('controller?command=owners')">All owners</button>
   <button class="navbar_button" onclick="navigateTo('controller?command=artists')">All artists</button>
   <button class="navbar_button" onclick="navigateTo('controller?command=artworks')">All artworks</button>
-  <button class="navbar_button" onclick="navigateTo('controller?command=create_exhibition_hall')">Create exhibition hall</button>
-  <button class="navbar_button" onclick="navigateTo('controller?command=create_exhibition')">Create exhibition</button>
-  <button class="navbar_button" onclick="navigateTo('controller?command=create_owner')">Create owner</button>
-  <button class="navbar_button" onclick="navigateTo('controller?command=create_artist')">Create artist</button>
-  <button class="navbar_button" onclick="navigateTo('controller?command=create_artwork')">Create artwork</button>
+  <button class="navbar_button" onclick="navigateTo('controller?command=create_exhibition_hall_form')">Create exhibition hall</button>
+  <button class="navbar_button" onclick="navigateTo('controller?command=create_exhibition_form')">Create exhibition</button>
+  <button class="navbar_button" onclick="navigateTo('controller?command=create_owner_form')">Create owner</button>
+  <button class="navbar_button" onclick="navigateTo('controller?command=create_artist_form')">Create artist</button>
+  <button class="navbar_button" onclick="navigateTo('controller?command=create_artwork_form')">Create artwork</button>
 </div>
 
 <script>
