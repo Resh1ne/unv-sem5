@@ -4,6 +4,7 @@ import by.bsuir.pbz2.controller.impl.artist.ArtistCommand;
 import by.bsuir.pbz2.controller.impl.artist.ArtistsCommand;
 import by.bsuir.pbz2.controller.impl.artwork.ArtworkCommand;
 import by.bsuir.pbz2.controller.impl.artwork.ArtworksCommand;
+import by.bsuir.pbz2.controller.impl.exhibition_hall.CreateExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.CreateExhibitionHallFormCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.CurExhibitionsCommand;
 import by.bsuir.pbz2.controller.impl.ErrorCommand;
@@ -84,6 +85,7 @@ public class CommandFactory implements Closeable {
         controllers.put("artworks", new ArtworksCommand(artworkService));
         controllers.put("artwork", new ArtworkCommand(artworkService));
         controllers.put("create_exhibition_hall_form", new CreateExhibitionHallFormCommand(ownerService));
+        controllers.put("create_exhibition_hall", new CreateExhibitionHallCommand(exhibitionHallService, ownerService));
     }
 
     private static DataSource getDataSource() {
