@@ -9,7 +9,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   </head>
   <body>
     <jsp:include page="../navbar.jsp" />
-    <h1>Register new exhibition hall</h1>
+    <h1>Register new exhibition</h1>
     <form method="post" action="controller">
       <input name="command" type="hidden" value="create_exhibition" />
       <label>Name:<input name="name" type="text" required /></label>
