@@ -14,6 +14,6 @@ public class DeleteExhibitionCommand implements Command {
         String rawId = req.getParameter("id");
         long id = Long.parseLong(rawId);
         exhibitionService.delete(id);
-        return "jsp/exhibition/delete_exhibition.jsp";
+        return "jsp/delete_object.jsp";
     }
 }
