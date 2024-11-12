@@ -1,6 +1,5 @@
 package by.bsuir.pbz2.service.dto;
 
-import by.bsuir.pbz2.data.entity.Artist;
 import by.bsuir.pbz2.data.entity.enums.ExecutionType;
 import lombok.Data;
 
@@ -16,5 +15,5 @@ public class ArtworkDto {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal volume;
-    private Artist artistId;
+    private ArtistDto artistId;
 }

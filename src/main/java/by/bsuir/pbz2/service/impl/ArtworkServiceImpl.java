@@ -1,8 +1,10 @@
 package by.bsuir.pbz2.service.impl;
 
 import by.bsuir.pbz2.data.dao.ArtworkDao;
+import by.bsuir.pbz2.data.entity.Artist;
 import by.bsuir.pbz2.data.entity.Artwork;
 import by.bsuir.pbz2.service.ArtworkService;
+import by.bsuir.pbz2.service.dto.ArtistDto;
 import by.bsuir.pbz2.service.dto.ArtworkDto;
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +30,7 @@ public class ArtworkServiceImpl implements ArtworkService {
         artwork.setHeight(dto.getHeight());
         artwork.setWidth(dto.getWidth());
         artwork.setVolume(dto.getVolume());
-        artwork.setArtistId(dto.getArtistId());
+        artwork.setArtistId(toArtistEntity(dto.getArtistId()));
         return artwork;
     }
 
@@ -41,8 +43,30 @@ public class ArtworkServiceImpl implements ArtworkService {
         artworkDto.setHeight(entity.getHeight());
         artworkDto.setWidth(entity.getWidth());
         artworkDto.setVolume(entity.getVolume());
-        artworkDto.setArtistId(entity.getArtistId());
+        artworkDto.setArtistId(toArtistDto(entity.getArtistId()));
         return artworkDto;
+    }
+
+    private Artist toArtistEntity(ArtistDto dto) {
+        Artist artistEntity = new Artist();
+        artistEntity.setId(dto.getId());
+        artistEntity.setName(dto.getName());
+        artistEntity.setBirthPlace(dto.getBirthPlace());
+        artistEntity.setBirthDate(dto.getBirthDate());
+        artistEntity.setBiography(dto.getBiography());
+        artistEntity.setEducation(dto.getEducation());
+        return artistEntity;
+    }
+
+    private ArtistDto toArtistDto(Artist entity) {
+        ArtistDto artistDto = new ArtistDto();
+        artistDto.setId(entity.getId());
+        artistDto.setName(entity.getName());
+        artistDto.setBirthPlace(entity.getBirthPlace());
+        artistDto.setBirthDate(entity.getBirthDate());
+        artistDto.setBiography(entity.getBiography());
+        artistDto.setEducation(entity.getEducation());
+        return artistDto;
     }
 
     @Override
