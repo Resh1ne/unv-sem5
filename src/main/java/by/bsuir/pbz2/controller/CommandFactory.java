@@ -23,6 +23,7 @@ import by.bsuir.pbz2.controller.impl.exhibition_hall.ExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.ExhibitionHallsCommand;
 import by.bsuir.pbz2.controller.impl.owner.CreateOwnerCommand;
 import by.bsuir.pbz2.controller.impl.owner.CreateOwnerFormCommand;
+import by.bsuir.pbz2.controller.impl.owner.DeleteOwnerCommand;
 import by.bsuir.pbz2.controller.impl.owner.EditOwnerCommand;
 import by.bsuir.pbz2.controller.impl.owner.EditOwnerFormCommand;
 import by.bsuir.pbz2.controller.impl.owner.OwnerCommand;
@@ -110,6 +111,7 @@ public class CommandFactory implements Closeable {
         controllers.put("create_owner", new CreateOwnerCommand(ownerService));
         controllers.put("edit_owner_form", new EditOwnerFormCommand(ownerService));
         controllers.put("edit_owner", new EditOwnerCommand(ownerService));
+        controllers.put("delete_owner", new DeleteOwnerCommand(ownerService));
     }
 
     private static DataSource getDataSource() {
