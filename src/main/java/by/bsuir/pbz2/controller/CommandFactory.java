@@ -10,6 +10,11 @@ import by.bsuir.pbz2.controller.impl.artist.EditArtistCommand;
 import by.bsuir.pbz2.controller.impl.artist.EditArtistFormCommand;
 import by.bsuir.pbz2.controller.impl.artwork.ArtworkCommand;
 import by.bsuir.pbz2.controller.impl.artwork.ArtworksCommand;
+import by.bsuir.pbz2.controller.impl.artwork.CreateArtworkCommand;
+import by.bsuir.pbz2.controller.impl.artwork.CreateArtworkFormCommand;
+import by.bsuir.pbz2.controller.impl.artwork.DeleteArtworkCommand;
+import by.bsuir.pbz2.controller.impl.artwork.EditArtworkCommand;
+import by.bsuir.pbz2.controller.impl.artwork.EditArtworkFormCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.CreateExhibitionCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.CreateExhibitionFormCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.CurExhibitionsCommand;
@@ -122,6 +127,11 @@ public class CommandFactory implements Closeable {
         controllers.put("edit_artist_form", new EditArtistFormCommand(artistService));
         controllers.put("edit_artist", new EditArtistCommand(artistService));
         controllers.put("delete_artist", new DeleteArtistCommand(artistService));
+        controllers.put("create_artwork", new CreateArtworkCommand(artistService, artworkService));
+        controllers.put("create_artwork_form", new CreateArtworkFormCommand(artistService));
+        controllers.put("delete_artwork", new DeleteArtworkCommand(artworkService));
+        controllers.put("edit_artwork", new EditArtworkCommand(artistService, artworkService));
+        controllers.put("edit_artwork_form", new EditArtworkFormCommand(artistService, artworkService));
     }
 
     private static DataSource getDataSource() {

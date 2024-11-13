@@ -13,6 +13,7 @@
     <p>Creation date: ${artwork.creationDate}</p>
     <p>Height: ${artwork.height}</p>
     <p>Width: ${artwork.width}</p>
+    <p>Volume: ${artwork.volume}</p>
     <p>Artist: ${artwork.artistId.name}</p>
   </body>
 </html>
