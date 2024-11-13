@@ -12,7 +12,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <h1>Update exhibition</h1>
     <form method="post" action="controller">
       <input name="command" type="hidden" value="edit_exhibition" />
-      <label>Name:<input name="name" type="text" required value="${exhibition.id}" /></label>
+      <input name="id" type="hidden" value="${exhibition.id}" />
+      <label>Name:<input name="name" type="text" required value="${exhibition.name}" /></label>
       <br />
       <label>Start date:<input type="date" name="start_date" min="2018-01-01" max="2040-01-01" value="${exhibition.startDate}" required /></label>
       <br />
@@ -32,7 +33,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 <option value="SCULPTURE" ${exhibition.type=="SCULPTURE" ? 'selected' : ''}>Sculpture</option>
               </select>
       <br />
-      <input type="submit" value="Create" />
+      <input type="submit" value="Update" />
     </form>
   </body>
 </html>

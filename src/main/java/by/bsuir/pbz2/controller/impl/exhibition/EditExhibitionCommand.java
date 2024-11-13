@@ -20,7 +20,7 @@ public class EditExhibitionCommand implements Command {
     public String execute(HttpServletRequest req) {
         ExhibitionDto exhibitionDto = process(req, exhibitionHallService);
 
-        ExhibitionDto exhibitionDtoCreated = exhibitionService.create(exhibitionDto);
+        ExhibitionDto exhibitionDtoCreated = exhibitionService.update(exhibitionDto);
 
         req.setAttribute("exhibition", exhibitionDtoCreated);
         return "jsp/exhibition/exhibition.jsp";
