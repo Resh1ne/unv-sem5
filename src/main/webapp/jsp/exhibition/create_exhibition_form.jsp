@@ -25,7 +25,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </c:forEach>
       </select>
       <br />
-       <label for="types">Enter language:</label>
+       <label for="types">Enter type:</label>
               <select name="type">
                 <option value="VISUAL_ART">Visual Art</option>
                 <option value="APPLIED_ART">Applied Art</option>

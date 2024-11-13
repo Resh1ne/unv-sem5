@@ -1,26 +1,28 @@
 package by.bsuir.pbz2.controller;
 
+import by.bsuir.pbz2.controller.impl.ErrorCommand;
 import by.bsuir.pbz2.controller.impl.artist.ArtistCommand;
 import by.bsuir.pbz2.controller.impl.artist.ArtistsCommand;
 import by.bsuir.pbz2.controller.impl.artwork.ArtworkCommand;
 import by.bsuir.pbz2.controller.impl.artwork.ArtworksCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.CreateExhibitionCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.CreateExhibitionFormCommand;
+import by.bsuir.pbz2.controller.impl.exhibition.CurExhibitionsCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.DeleteExhibitionCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.EditExhibitionCommand;
 import by.bsuir.pbz2.controller.impl.exhibition.EditExhibitionFormCommand;
+import by.bsuir.pbz2.controller.impl.exhibition.ExhibitionCommand;
+import by.bsuir.pbz2.controller.impl.exhibition.ExhibitionParAndArtCommand;
+import by.bsuir.pbz2.controller.impl.exhibition.ExhibitionsCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.CreateExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.CreateExhibitionHallFormCommand;
-import by.bsuir.pbz2.controller.impl.exhibition.CurExhibitionsCommand;
-import by.bsuir.pbz2.controller.impl.ErrorCommand;
-import by.bsuir.pbz2.controller.impl.exhibition.ExhibitionCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.DeleteExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.EditExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.EditExhibitionHallFormCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.ExhibitionHallCommand;
 import by.bsuir.pbz2.controller.impl.exhibition_hall.ExhibitionHallsCommand;
-import by.bsuir.pbz2.controller.impl.exhibition.ExhibitionParAndArtCommand;
-import by.bsuir.pbz2.controller.impl.exhibition.ExhibitionsCommand;
+import by.bsuir.pbz2.controller.impl.owner.CreateOwnerCommand;
+import by.bsuir.pbz2.controller.impl.owner.CreateOwnerFormCommand;
 import by.bsuir.pbz2.controller.impl.owner.OwnerCommand;
 import by.bsuir.pbz2.controller.impl.owner.OwnersCommand;
 import by.bsuir.pbz2.data.connection.DataSource;
@@ -102,6 +104,8 @@ public class CommandFactory implements Closeable {
         controllers.put("delete_exhibition", new DeleteExhibitionCommand(exhibitionService));
         controllers.put("edit_exhibition_form", new EditExhibitionFormCommand(exhibitionService, exhibitionHallService));
         controllers.put("edit_exhibition", new EditExhibitionCommand(exhibitionService, exhibitionHallService));
+        controllers.put("create_owner_form", new CreateOwnerFormCommand());
+        controllers.put("create_owner", new CreateOwnerCommand(ownerService));
     }
 
     private static DataSource getDataSource() {
