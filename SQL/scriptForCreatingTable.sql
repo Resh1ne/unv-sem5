@@ -69,8 +69,8 @@ CREATE TABLE artworks (
 );
 
 CREATE TABLE artwork_exhibitions (
-    exhibition_id INT REFERENCES exhibitions,
-    artwork_id INT REFERENCES artworks,
+    exhibition_id INT REFERENCES exhibitions ON DELETE CASCADE,
+    artwork_id INT REFERENCES artworks ON DELETE CASCADE,
     PRIMARY KEY (exhibition_id, artwork_id)
 );
 
