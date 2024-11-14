@@ -110,7 +110,8 @@ INSERT INTO exhibitions (name, hall_id, type_id, start_date, end_date)
 VALUES
     ('Modern Art Exhibition', 1, 1, '2024-01-15', '2024-02-15'),
     ('Sculpture Showcase', 2, 3, '2024-03-01', '2024-03-30'),
-    ('Watercolor Wonders', 3, 2, '2024-04-10', '2024-05-10');
+    ('Legends of painting', 2, 1, '2024-09-01', '2025-01-01'),
+    ('Watercolor Wonders', 3, 2, '2024-10-15', '2024-12-10');
 
 INSERT INTO artists (name, birth_place, birth_date, biography, education)
 VALUES
@@ -122,12 +123,14 @@ INSERT INTO artworks (title, execution_id, creation_date, height, width, volume,
 VALUES
     ('Abstract Sunrise', 1, '2023-06-01', 100.00, 150.00, NULL, 1),
     ('Modern Sculpture', 2, '2022-08-15', 40.00, 60.00, NULL, 2),
-    ('Nature in Watercolor', 2, '2024-02-20', 50.00, 70.00, NULL, 3);
+    ('Nature in Watercolor', 2, '2024-02-20', 50.00, 70.00, NULL, 3),
+    ('The Birth of Venus', 1, '1990-02-12', 50.00, 70.00, NULL, 3);
 
 INSERT INTO artwork_exhibitions (exhibition_id, artwork_id)
 VALUES
     (1, 1),
     (2, 2),
+    (3, 4),
     (3, 3);
 
 ---------------------------------
