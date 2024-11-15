@@ -188,3 +188,34 @@ BEGIN
 END;
 $$;
 ---------------------------------
+CREATE OR REPLACE FUNCTION get_exhibition_participants_and_artworks(p_exhibition_id BIGINT)
+RETURNS TABLE(
+    exhibition_name VARCHAR,
+    exhibition_start_date DATE,
+    exhibition_end_date DATE,
+    artwork_title VARCHAR,
+    execution_type VARCHAR,
+    artist_name VARCHAR,
+    artist_age INT,
+    creation_date DATE
+)
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        e.name AS exhibition_name,
+        e.start_date AS exhibition_start_date,
+        e.end_date AS exhibition_end_date,
+        a.title AS artwork_title,
+        et.execution AS execution_type,
+        ar.name AS artist_name,
+        CAST(EXTRACT(YEAR FROM AGE(CURRENT_DATE, ar.birth_date)) AS INT) AS artist_age,
+        a.creation_date
+    FROM exhibitions e
+    JOIN artwork_exhibitions ae ON e.id = ae.exhibition_id
+    JOIN artworks a ON ae.artwork_id = a.id
+    JOIN execution_types et ON a.execution_id = et.id
+    JOIN artists ar ON a.artist_id = ar.id
+    WHERE e.id = p_exhibition_id;
+END;
+$$ LANGUAGE plpgsql;
