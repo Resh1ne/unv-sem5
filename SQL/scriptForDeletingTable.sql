@@ -1,5 +1,4 @@
 DROP TABLE users CASCADE;
-DROP TABLE event_roles CASCADE;
 DROP TABLE events CASCADE;
 DROP TABLE event_participants CASCADE;
 DROP TABLE messages CASCADE;

@@ -33,8 +33,8 @@ public class EventParticipant {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
     @Column(name = "joined_at", nullable = false)

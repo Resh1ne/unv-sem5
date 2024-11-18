@@ -1,10 +1,3 @@
--- Таблица ролей участников мероприятия
-CREATE TABLE event_roles (
-    id BIGSERIAL PRIMARY KEY,
-    role_name VARCHAR(20) UNIQUE NOT NULL
-);
-INSERT INTO event_roles (role_name) VALUES ('HOST'), ('VIEWER');
-
 -- Таблица пользователей
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
@@ -31,7 +24,7 @@ CREATE TABLE event_participants (
     id BIGSERIAL PRIMARY KEY,
     event_id BIGINT REFERENCES events(id) ON DELETE CASCADE,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
-    role_id BIGINT REFERENCES event_roles(id) ON DELETE SET NULL,
+    role VARCHAR(255),
     joined_at TIMESTAMP DEFAULT NOW(),
     UNIQUE (event_id, user_id)
 );
