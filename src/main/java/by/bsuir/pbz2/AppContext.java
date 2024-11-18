@@ -13,12 +13,17 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @Configuration
 @ComponentScan
 @EnableTransactionManagement
 @RequiredArgsConstructor
-public class AppContext extends WebMvcConfigurationSupport {
+@EnableWebSocket
+public class AppContext extends WebMvcConfigurationSupport implements WebSocketConfigurer {
 
     @Bean
     public InternalResourceViewResolver viewResolver() {
@@ -44,5 +49,16 @@ public class AppContext extends WebMvcConfigurationSupport {
     @Bean
     public TransactionManager transactionManager(EntityManagerFactory factory) {
         return new JpaTransactionManager(factory);
+    }
+
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(new ScreenShareHandler(), "/screen-share")
+                .setAllowedOrigins("*");
+    }
+
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
     }
 }
