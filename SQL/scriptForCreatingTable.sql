@@ -23,15 +23,15 @@ CREATE TABLE events (
     start_time TIMESTAMP DEFAULT NOW(),
     end_time TIMESTAMP,
     access_key VARCHAR(50) UNIQUE NOT NULL,
-    host_id INT REFERENCES users(id) ON DELETE CASCADE
+    host_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Таблица участников мероприятий
 CREATE TABLE event_participants (
     id BIGSERIAL PRIMARY KEY,
-    event_id INT REFERENCES events(id) ON DELETE CASCADE,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    role_id INT REFERENCES event_roles(id) ON DELETE SET NULL,
+    event_id BIGINT REFERENCES events(id) ON DELETE CASCADE,
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+    role_id BIGINT REFERENCES event_roles(id) ON DELETE SET NULL,
     joined_at TIMESTAMP DEFAULT NOW(),
     UNIQUE (event_id, user_id)
 );
@@ -39,8 +39,8 @@ CREATE TABLE event_participants (
 -- Таблица сообщений чата
 CREATE TABLE messages (
     id BIGSERIAL PRIMARY KEY,
-    event_id INT REFERENCES events(id) ON DELETE CASCADE,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    event_id BIGINT REFERENCES events(id) ON DELETE CASCADE,
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
