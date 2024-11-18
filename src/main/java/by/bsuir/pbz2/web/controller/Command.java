@@ -1,4 +1,4 @@
-package by.bsuir.pbz2.controller;
+package by.bsuir.pbz2.web.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 

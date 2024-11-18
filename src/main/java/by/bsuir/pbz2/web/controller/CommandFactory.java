@@ -1,4 +1,4 @@
-package by.bsuir.pbz2.controller;
+package by.bsuir.pbz2.web.controller;
 
 import by.bsuir.pbz2.data.connection.DataSource;
 import by.bsuir.pbz2.data.connection.impl.DataSourceImpl;
