@@ -76,6 +76,6 @@
         </div>
     </div>
 
-    <script src="scriptJS/screenShare.js"></script>
+    <script src="/scriptJS/screenShare.js"></script>
 </body>
 </html>

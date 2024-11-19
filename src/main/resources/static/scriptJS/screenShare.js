@@ -40,7 +40,7 @@ function exitStream() {
 window.onload = generateStreamKey;
 
 // Подключение к WebSocket серверу
-var socket = new WebSocket("ws://localhost:8080/screen-share");
+var socket = new WebSocket("ws://localhost:8080/events/screen-share");
 
 socket.onopen = function(event) {
     console.log("Connected to WebSocket server.");
