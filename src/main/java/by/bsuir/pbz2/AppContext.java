@@ -37,8 +37,8 @@ public class AppContext extends WebMvcConfigurationSupport implements WebSocketC
 
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("css/**", "images/**").
-                addResourceLocations("classpath:/static/css/", "classpath:/static/images/");
+        registry.addResourceHandler("css/**", "images/**", "scriptJS/**").
+                addResourceLocations("classpath:/static/css/", "classpath:/static/images/", "classpath:/static/scriptJS/");
     }
 
     @Bean
