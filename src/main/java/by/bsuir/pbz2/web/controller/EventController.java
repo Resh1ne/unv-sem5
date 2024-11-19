@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/events")
-public class ScreenShareController {
+public class EventController {
 
     @GetMapping("/screen-share")
     public String showScreenSharePage() {
