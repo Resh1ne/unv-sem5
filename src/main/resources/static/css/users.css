@@ -1,0 +1,63 @@
+/* users.css */
+
+/* Основные стили для страницы списка пользователей */
+#users-list-page {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Стили для заголовка страницы */
+#users-list-title {
+    text-align: center;
+    color: #333;
+    margin-top: 50px;
+}
+
+/* Стили для таблицы */
+#users-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#users-table th, #users-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#users-table th {
+    background-color: #007BFF;
+    color: white;
+}
+
+#users-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Стили для ссылок */
+#user-${user.id}-details-link {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+#user-${user.id}-details-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    #users-table {
+        width: 90%;
+    }
+
+    #users-table th, #users-table td {
+        padding: 10px;
+    }
+}

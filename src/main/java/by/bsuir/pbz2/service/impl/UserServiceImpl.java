@@ -4,6 +4,7 @@ import by.bsuir.pbz2.data.entity.User;
 import by.bsuir.pbz2.data.repository.UserRepository;
 import by.bsuir.pbz2.service.UserService;
 import by.bsuir.pbz2.service.dto.UserDto;
+import by.bsuir.pbz2.service.exception.AppException;
 import by.bsuir.pbz2.service.exception.ResourceNotFoundException;
 import by.bsuir.pbz2.service.mapper.DataMapper;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +63,15 @@ public class UserServiceImpl implements UserService {
                 .findByEmail(email)
                 .map(dataMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email " + email + " not found")));
+    }
+
+    @Override
+    public UserDto login(String email, String password) {
+        return userRepository.findAll()
+                .stream()
+                .map(dataMapper::toDto)
+                .filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password))
+                .findFirst()
+                .orElseThrow(() -> new AppException("Account not found"));
     }
 }

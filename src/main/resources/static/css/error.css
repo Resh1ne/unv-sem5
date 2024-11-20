@@ -1,0 +1,32 @@
+body {
+    background-color: #333;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.error-container {
+    text-align: center;
+}
+
+h1, p {
+    margin: 0;
+}
+
+h1 {
+    color: #e44d26;
+}
+
+p {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.error-code {
+    font-size: 36px;
+    font-weight: bold;
+}

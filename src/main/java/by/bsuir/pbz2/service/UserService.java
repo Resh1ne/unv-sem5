@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface UserService extends CrudService<Long, UserDto> {
     Optional<UserDto> getByEmail(String email);
+    UserDto login(String email, String password);
 }
