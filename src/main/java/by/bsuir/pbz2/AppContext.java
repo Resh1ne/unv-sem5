@@ -16,7 +16,6 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @Configuration
 @ComponentScan
@@ -37,8 +36,8 @@ public class AppContext extends WebMvcConfigurationSupport implements WebSocketC
 
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("css/**", "images/**", "scriptJS/**").
-                addResourceLocations("classpath:/static/css/", "classpath:/static/images/", "classpath:/static/scriptJS/");
+        registry.addResourceHandler("css/**", "images/**", "scriptJS/**")
+                .addResourceLocations("classpath:/static/css/", "classpath:/static/images/", "classpath:/static/scriptJS/");
     }
 
     @Bean
@@ -54,11 +53,7 @@ public class AppContext extends WebMvcConfigurationSupport implements WebSocketC
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new ScreenShareHandler(), "/screen-share")
+                .addInterceptors(new CustomHandshakeInterceptor()) // Добавление кастомного интерсептора
                 .setAllowedOrigins("*");
-    }
-
-    @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        return new ServerEndpointExporter();
     }
 }

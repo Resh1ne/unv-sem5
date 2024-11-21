@@ -3,6 +3,7 @@ package by.bsuir.pbz2.data.repository.impl;
 import by.bsuir.pbz2.data.entity.Event;
 import by.bsuir.pbz2.data.repository.EventRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -45,5 +46,18 @@ public class EventRepositoryImpl implements EventRepository {
         }
         manager.remove(event);
         return true;
+    }
+
+    @Override
+    public Optional<Event> findEventByAccessKey(String accessKey) {
+        try {
+            Event event = manager.createQuery(
+                            "SELECT e FROM Event e WHERE e.accessKey = :accessKey", Event.class)
+                    .setParameter("accessKey", accessKey)
+                    .getSingleResult();
+            return Optional.ofNullable(event);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 }

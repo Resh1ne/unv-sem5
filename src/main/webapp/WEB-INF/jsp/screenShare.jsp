@@ -36,9 +36,6 @@
                     <h3>Viewers</h3>
                     <div class="viewers-list" id="viewersList">
                         <!-- Список зрителей -->
-                        <div class="viewer">Viewer 1</div>
-                        <div class="viewer">Viewer 2</div>
-                        <div class="viewer">Viewer 3</div>
                     </div>
                 </div>
             </div>
@@ -56,8 +53,8 @@
                         <input type="checkbox" id="audio" checked> Enable Audio
                     </div>
                     <div class="setting">
-                        <label for="key">Stream Key:</label>
-                        <input type="text" id="streamKey" disabled>
+                        <label for="accessKey">Access Key:</label>
+                        <input type="text" id="accessKey" placeholder="Enter Access Key">
                     </div>
                     <div class="setting">
                         <button class="exit-button" onclick="exitStream()">Exit</button>

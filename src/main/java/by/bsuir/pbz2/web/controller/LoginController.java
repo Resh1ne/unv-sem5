@@ -26,6 +26,7 @@ public class LoginController {
     public String login(@RequestParam String email, @RequestParam String password, HttpSession session) {
         UserDto user = userService.login(email, password);
         session.setAttribute("user", user);
+        session.setAttribute("userId", user.getId());
         return "index";
     }
 
