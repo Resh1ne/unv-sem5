@@ -54,7 +54,7 @@
                     </div>
                     <div class="setting">
                         <label for="accessKey">Access Key:</label>
-                        <input type="text" id="accessKey" placeholder="Enter Access Key">
+                        <span id="accessKey">${accessKey}</span>
                     </div>
                     <div class="setting">
                         <button class="exit-button" onclick="exitStream()">Exit</button>
