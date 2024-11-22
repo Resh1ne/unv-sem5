@@ -46,14 +46,6 @@
                 <div class="settings-container">
                     <h3>Settings</h3>
                     <div class="setting">
-                        <label for="quality">Video Quality:</label>
-                        <input type="range" id="quality" name="quality" min="1" max="10">
-                    </div>
-                    <div class="setting">
-                        <label for="audio">Audio:</label>
-                        <input type="checkbox" id="audio" checked> Enable Audio
-                    </div>
-                    <div class="setting">
                         <label for="accessKey">Access Key:</label>
                         <span id="accessKey">${accessKey}</span>
                     </div>
