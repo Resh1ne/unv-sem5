@@ -1,5 +1,6 @@
 package by.bsuir.pbz2.web.controller;
 
+import by.bsuir.pbz2.service.EventParticipantService;
 import by.bsuir.pbz2.service.EventService;
 import by.bsuir.pbz2.service.UserService;
 import by.bsuir.pbz2.service.dto.EventDto;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class EventController {
     private final EventService eventService;
     private final UserService userService;
+    private final EventParticipantService eventParticipantService;
 
     @GetMapping("/screen-share/{accessKey}")
     public String joinScreenShare(@PathVariable String accessKey, HttpSession session, Model model) {
@@ -29,7 +31,6 @@ public class EventController {
         if (event == null) {
             return "error"; // Страница ошибки
         }
-
         // Сохраняем информацию о текущем событии и пользователе в HTTP-сессии
         session.setAttribute("currentEvent", event);
         session.setAttribute("userId", session.getAttribute("userId"));
@@ -38,6 +39,9 @@ public class EventController {
 
         model.addAttribute("accessKey", accessKey);
         model.addAttribute("isHost", event.getHost().getId().equals(session.getAttribute("userId")));
+        model.addAttribute("username", userService.getById(event.getHost().getId()).getUsername());
+        model.addAttribute("title", event.getTitle());
+        model.addAttribute("description", event.getDescription());
         return "screenShare"; // JSP-страница с трансляцией
     }
 

@@ -36,6 +36,7 @@
                     <h3>Viewers</h3>
                     <div class="viewers-list" id="viewersList">
                         <!-- Список зрителей -->
+                        <p>${username}</p>
                     </div>
                 </div>
             </div>
@@ -73,8 +74,8 @@
         <div class="video-container">
             <video id="videoElement" autoplay></video>
             <div class="event-info">
-                <h3>Event Title</h3>
-                <p>Event description goes here. This is where the details of the event will be displayed.</p>
+                <h3>${title}</h3>
+                <p>${description}</p>
             </div>
         </div>
     </div>

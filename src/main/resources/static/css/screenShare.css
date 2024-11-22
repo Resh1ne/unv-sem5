@@ -1,3 +1,4 @@
+/* Общий стиль для текста */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -98,6 +99,7 @@ video {
     padding: 10px;
     overflow-y: auto;
     max-height: 600px; /* Увеличили размер чата */
+    color: #333; /* Цвет текста для чата */
 }
 
 .message-input {
@@ -140,6 +142,7 @@ video {
     padding: 10px;
     overflow-y: auto;
     max-height: 300px;
+    color: #333; /* Цвет текста для списка зрителей */
 }
 
 .viewer {

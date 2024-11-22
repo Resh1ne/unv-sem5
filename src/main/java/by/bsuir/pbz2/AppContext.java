@@ -54,5 +54,7 @@ public class AppContext extends WebMvcConfigurationSupport implements WebSocketC
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new ScreenShareHandler(), "events/screen-share/{accessKey}")
                 .setAllowedOrigins("*");
+        registry.addHandler(new ChatWebSocketHandler(), "/chat/{accessKey}")
+                .setAllowedOrigins("*"); // Разрешаем все источники
     }
 }
