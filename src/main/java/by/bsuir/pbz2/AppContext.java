@@ -52,8 +52,7 @@ public class AppContext extends WebMvcConfigurationSupport implements WebSocketC
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new ScreenShareHandler(), "/screen-share")
-                .addInterceptors(new CustomHandshakeInterceptor()) // Добавление кастомного интерсептора
+        registry.addHandler(new ScreenShareHandler(), "events/screen-share/{accessKey}")
                 .setAllowedOrigins("*");
     }
 }

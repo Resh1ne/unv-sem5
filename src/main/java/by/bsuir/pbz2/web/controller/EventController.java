@@ -1,7 +1,5 @@
 package by.bsuir.pbz2.web.controller;
 
-import by.bsuir.pbz2.data.entity.Event;
-import by.bsuir.pbz2.data.entity.User;
 import by.bsuir.pbz2.service.EventService;
 import by.bsuir.pbz2.service.UserService;
 import by.bsuir.pbz2.service.dto.EventDto;
@@ -32,11 +30,25 @@ public class EventController {
             return "error"; // Страница ошибки
         }
 
+        // Сохраняем информацию о текущем событии и пользователе в HTTP-сессии
         session.setAttribute("currentEvent", event);
+        session.setAttribute("userId", session.getAttribute("userId"));
         session.setAttribute("isHost", event.getHost().getId().equals(session.getAttribute("userId")));
+
+
         model.addAttribute("accessKey", accessKey);
+        model.addAttribute("isHost", event.getHost().getId().equals(session.getAttribute("userId")));
         return "screenShare"; // JSP-страница с трансляцией
     }
+
+    // Обработчик POST-запроса для выхода из трансляции
+    @GetMapping("/screen-share/{accessKey}/exit")
+    public String exitStream(@PathVariable String accessKey) {
+        EventDto event = eventService.getEventByAccessKey(accessKey);
+        eventService.delete(event.getId());
+        return "index";
+    }
+
 
     @GetMapping("/create")
     public String createEventForm() {
@@ -52,7 +64,11 @@ public class EventController {
         UserDto host = userService.getById(userId);
         event.setHost(host);
         EventDto eventCreated = eventService.create(event);
-        return ResponseEntity.ok("Event created with access key: " + eventCreated.getAccessKey());
+        // Получаем accessKey созданного мероприятия
+        String accessKey = eventCreated.getAccessKey();
+
+        // Перенаправляем пользователя на страницу мероприятия с accessKey
+        return ResponseEntity.status(302).header("Location", "/events/screen-share/" + accessKey).build();
     }
 
     @GetMapping("/join")

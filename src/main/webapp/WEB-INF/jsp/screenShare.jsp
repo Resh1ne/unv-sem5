@@ -57,7 +57,13 @@
                         <span id="accessKey">${accessKey}</span>
                     </div>
                     <div class="setting">
-                        <button class="exit-button" onclick="exitStream()">Exit</button>
+                        <button id="startShareButton">Start Screen Share</button>
+                        <form action="/events/screen-share/${accessKey}/exit" method="GET" style="${isHost ? 'display:block' : 'display:none'}">
+                            <button type="submit" id="exitButton" class="exit-button">Exit</button>
+                        </form>
+                        <form action="/" method="GET" style="${!isHost ? 'display:block' : 'display:none'}">
+                            <button type="submit" id="homeButton" class="home-button">Home</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -72,7 +78,9 @@
             </div>
         </div>
     </div>
-
-    <script src="/scriptJS/screenShare.js"></script>
+    <script>
+        var isHost = ${isHost};  // Это значение будет доступно в JavaScript
+    </script>
+    <script src="/scriptJS/demo.js" defer></script>
 </body>
 </html>

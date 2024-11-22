@@ -1,6 +1,7 @@
 package by.bsuir.pbz2;
 
 import by.bsuir.pbz2.data.entity.Event;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -13,23 +14,30 @@ public class ScreenShareHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        Long userId = (Long) session.getAttributes().get("userId"); // Получение идентификатора пользователя
-        if (userId != null) {
-            sessions.put(userId, session); // Добавление сессии в список
-            System.out.println("User " + userId + " connected.");
-        } else {
-            session.close(); // Закрытие сессии, если пользователь не аутентифицирован
+        // Когда новый пользователь подключается, отправляем последний кадр или сообщение о начале трансляции
+        if (session.getAttributes().get("isHost") != null) {
+            // Если это хост, то ему не нужно отправлять состояние потока, он может начать трансляцию
+            for (WebSocketSession s : sessions.values()) {
+                if (s.isOpen() && !s.equals(session)) {
+                    s.sendMessage(new TextMessage("Stream Started"));
+                }
+            }
         }
     }
+
+
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         Long userId = (Long) session.getAttributes().get("userId");
         Event event = (Event) session.getAttributes().get("currentEvent");
 
+        // Логирование
+        System.out.println("WebSocketSession handleTextMessage: userId=" + userId + ", event=" + event);
+
         if (event != null && userId != null) {
             if (event.getHost().getId().equals(userId)) {
-                // Отправка данных всем подключённым сессиям
+                // Отправка данных всем подключённым сессиям (и зрителям, и хосту)
                 for (WebSocketSession s : sessions.values()) {
                     if (s.isOpen()) {
                         s.sendMessage(message);
@@ -42,6 +50,7 @@ public class ScreenShareHandler extends TextWebSocketHandler {
             session.sendMessage(new TextMessage("Error: Invalid session or event."));
         }
     }
+
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
