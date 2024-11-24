@@ -5,6 +5,7 @@ import by.bsuir.pbz2.data.dao.OwnerDao;
 import by.bsuir.pbz2.data.entity.Owner;
 import by.bsuir.pbz2.data.entity.enums.OwnerType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 public class OwnerDaoImpl implements OwnerDao {
     private final DataSource dataSource;
@@ -36,9 +38,9 @@ public class OwnerDaoImpl implements OwnerDao {
             "WHERE id = ?";
     private static final String DELETE_QUERY = "DELETE FROM owners WHERE id = ?";
 
-
     @Override
     public Owner create(Owner entity) {
+        log.info("Creating owner: {}", entity);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(CREATION_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, entity.getName());
@@ -49,9 +51,11 @@ public class OwnerDaoImpl implements OwnerDao {
             ResultSet keys = statement.getGeneratedKeys();
             if (keys.next()) {
                 long id = keys.getLong("id");
+                log.info("Owner created with ID: {}", id);
                 return findById(id);
             }
         } catch (SQLException e) {
+            log.error("Error creating owner: {}", entity, e);
             throw new RuntimeException(e);
         }
         throw new RuntimeException("Can't create owner: " + entity);
@@ -59,16 +63,21 @@ public class OwnerDaoImpl implements OwnerDao {
 
     @Override
     public Owner findById(Long id) {
+        log.info("Finding owner by ID: {}", id);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return mapRow(resultSet);
+                Owner owner = mapRow(resultSet);
+                log.info("Owner found: {}", owner);
+                return owner;
             }
         } catch (SQLException e) {
+            log.error("Error finding owner by ID: {}", id, e);
             throw new RuntimeException(e);
         }
+        log.warn("Owner not found with ID: {}", id);
         return null;
     }
 
@@ -84,6 +93,7 @@ public class OwnerDaoImpl implements OwnerDao {
 
     @Override
     public List<Owner> findAll() {
+        log.info("Finding all owners");
         List<Owner> owners = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
@@ -92,7 +102,9 @@ public class OwnerDaoImpl implements OwnerDao {
                 Owner owner = mapRow(resultSet);
                 owners.add(owner);
             }
+            log.info("Found {} owners", owners.size());
         } catch (SQLException e) {
+            log.error("Error finding all owners", e);
             throw new RuntimeException(e);
         }
         return owners;
@@ -100,6 +112,7 @@ public class OwnerDaoImpl implements OwnerDao {
 
     @Override
     public Owner update(Owner entity) {
+        log.info("Updating owner: {}", entity);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
             statement.setString(1, entity.getName());
@@ -111,24 +124,35 @@ public class OwnerDaoImpl implements OwnerDao {
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
+                log.info("Owner updated with ID: {}", entity.getId());
                 return findById(entity.getId());
             } else {
+                log.warn("Failed to update owner, no rows affected: {}", entity);
                 throw new RuntimeException("Failed to update owner. No rows affected.");
             }
         } catch (SQLException e) {
+            log.error("Error updating owner: {}", entity, e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public boolean delete(Long id) {
+        log.info("Deleting owner with ID: {}", id);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
             statement.setLong(1, id);
             int rowsAffected = statement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                log.info("Owner deleted with ID: {}", id);
+                return true;
+            } else {
+                log.warn("No owner found to delete with ID: {}", id);
+                return false;
+            }
         } catch (SQLException e) {
+            log.error("Error deleting owner with ID: {}", id, e);
             throw new RuntimeException(e);
         }
     }

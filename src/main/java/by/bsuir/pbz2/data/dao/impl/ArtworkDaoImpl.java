@@ -6,6 +6,7 @@ import by.bsuir.pbz2.data.dao.ArtworkDao;
 import by.bsuir.pbz2.data.entity.Artwork;
 import by.bsuir.pbz2.data.entity.enums.ExecutionType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -18,6 +19,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 public class ArtworkDaoImpl implements ArtworkDao {
     private final DataSource dataSource;
@@ -43,9 +45,9 @@ public class ArtworkDaoImpl implements ArtworkDao {
             "WHERE id = ?";
     private static final String DELETE_QUERY = "DELETE FROM artworks WHERE id = ?";
 
-
     @Override
     public Artwork create(Artwork entity) {
+        log.info("Creating artwork: {}", entity);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(CREATION_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, entity.getTitle());
@@ -59,9 +61,11 @@ public class ArtworkDaoImpl implements ArtworkDao {
             ResultSet keys = statement.getGeneratedKeys();
             if (keys.next()) {
                 long id = keys.getLong("id");
+                log.info("Artwork created with ID: {}", id);
                 return findById(id);
             }
         } catch (SQLException e) {
+            log.error("Error creating artwork: {}", entity, e);
             throw new RuntimeException(e);
         }
         throw new RuntimeException("Can't create artwork: " + entity);
@@ -77,6 +81,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
 
     @Override
     public Artwork findById(Long id) {
+        log.info("Finding artwork by ID: {}", id);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY);
             statement.setLong(1, id);
@@ -85,6 +90,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
                 return mapRow(resultSet);
             }
         } catch (SQLException e) {
+            log.error("Error finding artwork with ID: {}", id, e);
             throw new RuntimeException(e);
         }
         return null;
@@ -107,6 +113,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
 
     @Override
     public List<Artwork> findAll() {
+        log.info("Finding all artworks");
         List<Artwork> artworks = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
@@ -116,6 +123,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
                 artworks.add(artwork);
             }
         } catch (SQLException e) {
+            log.error("Error finding all artworks", e);
             throw new RuntimeException(e);
         }
         return artworks;
@@ -123,6 +131,7 @@ public class ArtworkDaoImpl implements ArtworkDao {
 
     @Override
     public Artwork update(Artwork entity) {
+        log.info("Updating artwork: {}", entity);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
             statement.setString(1, entity.getTitle());
@@ -137,24 +146,35 @@ public class ArtworkDaoImpl implements ArtworkDao {
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
+                log.info("Artwork updated successfully with ID: {}", entity.getId());
                 return findById(entity.getId());
             } else {
+                log.warn("Failed to update artwork. No rows affected for ID: {}", entity.getId());
                 throw new RuntimeException("Failed to update artwork. No rows affected.");
             }
         } catch (SQLException e) {
+            log.error("Error updating artwork: {}", entity, e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public boolean delete(Long id) {
+        log.info("Deleting artwork with ID: {}", id);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
             statement.setLong(1, id);
             int rowsAffected = statement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                log.info("Artwork deleted successfully with ID: {}", id);
+                return true;
+            } else {
+                log.warn("Failed to delete artwork with ID: {}", id);
+                return false;
+            }
         } catch (SQLException e) {
+            log.error("Error deleting artwork with ID: {}", id, e);
             throw new RuntimeException(e);
         }
     }

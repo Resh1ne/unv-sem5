@@ -53,6 +53,7 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
 
     @Override
     public Exhibition create(Exhibition entity) {
+        log.info("Creating exhibition: {}", entity);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(CREATION_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, entity.getName());
@@ -64,16 +65,20 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
             ResultSet keys = statement.getGeneratedKeys();
             if (keys.next()) {
                 long id = keys.getLong("id");
+                log.info("Exhibition created with ID: {}", id);
                 return findById(id);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error("Error creating exhibition: {}", entity, e);
+            throw new RuntimeException("Error creating exhibition", e);
         }
+        log.error("Exhibition creation failed: {}", entity);
         throw new RuntimeException("Can't create exhibition: " + entity);
     }
 
     @Override
     public Exhibition findById(Long id) {
+        log.info("Finding exhibition by ID: {}", id);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY);
             statement.setLong(1, id);
@@ -82,13 +87,15 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
                 return mapRow(resultSet);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error("Error finding exhibition by ID: {}", id, e);
+            throw new RuntimeException("Error finding exhibition by ID", e);
         }
         return null;
     }
 
     @Override
     public List<ExhibitionParticipantsAndArtworks> findParticipantsArtworksByExhibitionId(Long id) {
+        log.info("Finding participants and artworks for exhibition ID: {}", id);
         List<ExhibitionParticipantsAndArtworks> exhibitionParticipantsAndArtworks = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_PARTICIPANTS_ARTWORKS_BY_EXHIBITION_ID);
@@ -107,13 +114,15 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
                 exhibitionParticipantsAndArtworks.add(exhibition);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error("Error finding participants and artworks for exhibition ID: {}", id, e);
+            throw new RuntimeException("Error finding participants and artworks for exhibition", e);
         }
         return exhibitionParticipantsAndArtworks;
     }
 
     @Override
     public List<CurrentExhibition> findCurrentExhibition() {
+        log.info("Finding current exhibitions");
         List<CurrentExhibition> exhibitions = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
@@ -125,7 +134,8 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
                 exhibitions.add(exhibition);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error("Error finding current exhibitions", e);
+            throw new RuntimeException("Error finding current exhibitions", e);
         }
         return exhibitions;
     }
@@ -145,6 +155,7 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
 
     @Override
     public List<Exhibition> findAll() {
+        log.info("Finding all exhibitions");
         List<Exhibition> exhibitions = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
@@ -154,13 +165,15 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
                 exhibitions.add(exhibition);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error("Error finding all exhibitions", e);
+            throw new RuntimeException("Error finding all exhibitions", e);
         }
         return exhibitions;
     }
 
     @Override
     public Exhibition update(Exhibition entity) {
+        log.info("Updating exhibition: {}", entity);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
             statement.setString(1, entity.getName());
@@ -173,25 +186,35 @@ public class ExhibitionDaoImpl implements ExhibitionDao {
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
+                log.info("Exhibition updated with ID: {}", entity.getId());
                 return findById(entity.getId());
             } else {
+                log.warn("Failed to update exhibition, no rows affected: {}", entity);
                 throw new RuntimeException("Failed to update exhibition. No rows affected.");
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error("Error updating exhibition: {}", entity, e);
+            throw new RuntimeException("Error updating exhibition", e);
         }
     }
 
     @Override
     public boolean delete(Long id) {
+        log.info("Deleting exhibition with ID: {}", id);
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
             statement.setLong(1, id);
             int rowsAffected = statement.executeUpdate();
-
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                log.info("Exhibition deleted with ID: {}", id);
+                return true;
+            } else {
+                log.warn("Failed to delete exhibition, no rows affected with ID: {}", id);
+                return false;
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error("Error deleting exhibition with ID: {}", id, e);
+            throw new RuntimeException("Error deleting exhibition", e);
         }
     }
 }

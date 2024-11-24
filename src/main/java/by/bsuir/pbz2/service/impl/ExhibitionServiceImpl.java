@@ -13,27 +13,35 @@ import by.bsuir.pbz2.service.dto.ExhibitionHallDto;
 import by.bsuir.pbz2.service.dto.ExhibitionParticipantsAndArtworksDto;
 import by.bsuir.pbz2.service.dto.OwnerDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 public class ExhibitionServiceImpl implements ExhibitionService {
     private final ExhibitionDao exhibitionDao;
 
     @Override
     public List<CurrentExhibitionDto> getCurrentExhibition() {
-        return exhibitionDao.findCurrentExhibition()
+        log.info("Fetching current exhibitions");
+        List<CurrentExhibitionDto> currentExhibitions = exhibitionDao.findCurrentExhibition()
                 .stream()
                 .map(this::toCurrentExhibitionDto)
                 .toList();
+        log.info("Fetched {} current exhibitions", currentExhibitions.size());
+        return currentExhibitions;
     }
 
     @Override
     public List<ExhibitionParticipantsAndArtworksDto> getParticipantsArtworksByExhibitionId(Long id) {
-        return exhibitionDao.findParticipantsArtworksByExhibitionId(id)
+        log.info("Fetching participants and artworks for exhibition id: {}", id);
+        List<ExhibitionParticipantsAndArtworksDto> participantsArtworks = exhibitionDao.findParticipantsArtworksByExhibitionId(id)
                 .stream()
                 .map(this::toExhibitionParticipantsAndArtworksDto)
                 .toList();
+        log.info("Fetched {} participants and artworks for exhibition id: {}", participantsArtworks.size(), id);
+        return participantsArtworks;
     }
 
     private CurrentExhibitionDto toCurrentExhibitionDto(CurrentExhibition entity) {
@@ -121,42 +129,55 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     public ExhibitionDto create(ExhibitionDto dto) {
+        log.info("Creating exhibition with name: {}", dto.getName());
         Exhibition exhibition = toExhibitionEntity(dto);
         Exhibition exhibitionCreated = exhibitionDao.create(exhibition);
+        log.info("Created exhibition with name: {}", exhibitionCreated.getName());
         return toExhibitionDto(exhibitionCreated);
     }
 
     @Override
     public ExhibitionDto getById(Long id) {
+        log.info("Fetching exhibition with id: {}", id);
         Exhibition exhibition = exhibitionDao.findById(id);
         if (exhibition == null) {
+            log.error("No exhibition found with id: {}", id);
             throw new RuntimeException("No exhibition with id: " + id);
         }
+        log.info("Fetched exhibition with id: {}", id);
         return toExhibitionDto(exhibition);
     }
 
     @Override
     public List<ExhibitionDto> getAll() {
-        return exhibitionDao.findAll()
+        log.info("Fetching all exhibitions");
+        List<ExhibitionDto> exhibitions = exhibitionDao.findAll()
                 .stream()
                 .map(this::toExhibitionDto)
                 .toList();
+        log.info("Fetched {} exhibitions", exhibitions.size());
+        return exhibitions;
     }
 
     @Override
     public ExhibitionDto update(ExhibitionDto dto) {
+        log.info("Updating exhibition with id: {}", dto.getId());
         Exhibition exhibition = toExhibitionEntity(dto);
         exhibition.setId(dto.getId());
-        Exhibition exhibitionCreated = exhibitionDao.update(exhibition);
-        return toExhibitionDto(exhibitionCreated);
+        Exhibition exhibitionUpdated = exhibitionDao.update(exhibition);
+        log.info("Updated exhibition with id: {}", exhibitionUpdated.getId());
+        return toExhibitionDto(exhibitionUpdated);
     }
 
     @Override
     public void delete(Long id) {
+        log.info("Deleting exhibition with id: {}", id);
         Exhibition exhibition = exhibitionDao.findById(id);
         if (exhibition == null) {
+            log.error("Exhibition with id: {} not found", id);
             throw new RuntimeException("Exhibition with id: " + id + " not found");
         }
         exhibitionDao.delete(id);
+        log.info("Deleted exhibition with id: {}", id);
     }
 }

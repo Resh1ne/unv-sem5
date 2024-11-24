@@ -7,10 +7,12 @@ import by.bsuir.pbz2.service.dto.ExhibitionHallDto;
 import by.bsuir.pbz2.service.dto.OwnerDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Log4j2
 @RequiredArgsConstructor
 public class EditExhibitionHallCommand implements Command {
     private final ExhibitionHallService exhibitionHallService;
@@ -20,9 +22,13 @@ public class EditExhibitionHallCommand implements Command {
     public String execute(HttpServletRequest req) {
         ExhibitionHallDto exhibitionHallDto = process(req, ownerService);
 
-        ExhibitionHallDto exhibitionHallDtoCreated = exhibitionHallService.update(exhibitionHallDto);
+        log.info("Updating exhibition hall with ID: {}", exhibitionHallDto.getId());
 
-        req.setAttribute("exhibition", exhibitionHallDtoCreated);
+        ExhibitionHallDto exhibitionHallDtoUpdated = exhibitionHallService.update(exhibitionHallDto);
+
+        log.info("Exhibition hall with ID: {} updated successfully", exhibitionHallDto.getId());
+
+        req.setAttribute("exhibition", exhibitionHallDtoUpdated);
         return "jsp/exhibition_hall/exhibition_hall.jsp";
     }
 

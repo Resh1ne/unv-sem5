@@ -7,18 +7,21 @@ import by.bsuir.pbz2.service.ExhibitionHallService;
 import by.bsuir.pbz2.service.dto.ExhibitionHallDto;
 import by.bsuir.pbz2.service.dto.OwnerDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 public class ExhibitionHallServiceImpl implements ExhibitionHallService {
     private final ExhibitionHallDao exhibitionHallDao;
 
-
     @Override
     public ExhibitionHallDto create(ExhibitionHallDto dto) {
+        log.info("Creating exhibition hall with name: {}", dto.getName());
         ExhibitionHall exhibitionHall = toExhibitionHallEntity(dto);
         ExhibitionHall exhibitionHallCreated = exhibitionHallDao.create(exhibitionHall);
+        log.info("Created exhibition hall with name: {}", exhibitionHallCreated.getName());
         return toExhibitionHallDto(exhibitionHallCreated);
     }
 
@@ -65,35 +68,46 @@ public class ExhibitionHallServiceImpl implements ExhibitionHallService {
 
     @Override
     public ExhibitionHallDto getById(Long id) {
+        log.info("Fetching exhibition hall with id: {}", id);
         ExhibitionHall exhibitionHall = exhibitionHallDao.findById(id);
         if (exhibitionHall == null) {
+            log.error("No exhibition hall found with id: {}", id);
             throw new RuntimeException("No exhibition hall with id: " + id);
         }
+        log.info("Fetched exhibition hall with id: {}", id);
         return toExhibitionHallDto(exhibitionHall);
     }
 
     @Override
     public List<ExhibitionHallDto> getAll() {
-        return exhibitionHallDao.findAll()
+        log.info("Fetching all exhibition halls");
+        List<ExhibitionHallDto> exhibitionHalls = exhibitionHallDao.findAll()
                 .stream()
                 .map(this::toExhibitionHallDto)
                 .toList();
+        log.info("Fetched {} exhibition halls", exhibitionHalls.size());
+        return exhibitionHalls;
     }
 
     @Override
     public ExhibitionHallDto update(ExhibitionHallDto dto) {
+        log.info("Updating exhibition hall with id: {}", dto.getId());
         ExhibitionHall exhibitionHall = toExhibitionHallEntity(dto);
         exhibitionHall.setId(dto.getId());
-        ExhibitionHall exhibitionHallCreated = exhibitionHallDao.update(exhibitionHall);
-        return toExhibitionHallDto(exhibitionHallCreated);
+        ExhibitionHall exhibitionHallUpdated = exhibitionHallDao.update(exhibitionHall);
+        log.info("Updated exhibition hall with id: {}", exhibitionHallUpdated.getId());
+        return toExhibitionHallDto(exhibitionHallUpdated);
     }
 
     @Override
     public void delete(Long id) {
+        log.info("Deleting exhibition hall with id: {}", id);
         ExhibitionHall exhibitionHall = exhibitionHallDao.findById(id);
         if (exhibitionHall == null) {
+            log.error("Exhibition hall with id: {} not found", id);
             throw new RuntimeException("Exhibition hall with id: " + id + " not found");
         }
         exhibitionHallDao.delete(id);
+        log.info("Deleted exhibition hall with id: {}", id);
     }
 }

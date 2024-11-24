@@ -8,11 +8,13 @@ import by.bsuir.pbz2.service.dto.ArtistDto;
 import by.bsuir.pbz2.service.dto.ArtworkDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Log4j2
 @RequiredArgsConstructor
 public class CreateArtworkCommand implements Command {
     private final ArtistService artistService;
@@ -20,39 +22,37 @@ public class CreateArtworkCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        ArtworkDto artworkDto = process(req, artistService);
+        log.info("Starting CreateArtworkCommand execution.");
 
-        ArtworkDto artworkDtoCreated = artworkService.create(artworkDto);
+        ArtworkDto artworkDto;
+        try {
+            artworkDto = process(req, artistService);
+            log.info("Processed artwork data for creation: {}", artworkDto);
 
-        req.setAttribute("artwork", artworkDtoCreated);
+            ArtworkDto artworkDtoCreated = artworkService.create(artworkDto);
+            req.setAttribute("artwork", artworkDtoCreated);
+            log.info("Artwork created successfully with ID: {}", artworkDtoCreated.getId());
+        } catch (Exception e) {
+            log.error("Failed to create artwork.", e);
+            req.setAttribute("errorMessage", "Failed to create artwork.");
+            return "jsp/error.jsp";
+        }
+
+        log.info("CreateArtworkCommand execution completed successfully.");
         return "jsp/artwork/artwork.jsp";
     }
 
     private static ArtworkDto process(HttpServletRequest req, ArtistService artistService) {
+        log.debug("Processing request data for artwork creation.");
+
         String title = req.getParameter("title");
         String executionType = req.getParameter("execution_type");
         String creationDate = req.getParameter("creation_date");
-        String heightString = req.getParameter("height");
-        BigDecimal height;
-        if (Objects.equals(heightString, "")) {
-            height = BigDecimal.valueOf(0);
-        } else {
-            height = new BigDecimal(req.getParameter("height"));
-        }
-        String widthString = req.getParameter("width");
-        BigDecimal width;
-        if (Objects.equals(widthString, "")) {
-            width = BigDecimal.valueOf(0);
-        } else {
-            width = new BigDecimal(req.getParameter("width"));
-        }
-        String volumeString = req.getParameter("volume");
-        BigDecimal volume;
-        if (Objects.equals(volumeString, "")) {
-            volume = BigDecimal.valueOf(0);
-        } else {
-            volume = new BigDecimal(req.getParameter("volume"));
-        }
+
+        BigDecimal height = parseBigDecimal(req.getParameter("height"));
+        BigDecimal width = parseBigDecimal(req.getParameter("width"));
+        BigDecimal volume = parseBigDecimal(req.getParameter("volume"));
+
         ArtistDto artistDto = artistService.getById(Long.parseLong(req.getParameter("artist")));
 
         ArtworkDto artworkDto = new ArtworkDto();
@@ -63,6 +63,20 @@ public class CreateArtworkCommand implements Command {
         artworkDto.setWidth(width);
         artworkDto.setVolume(volume);
         artworkDto.setArtistId(artistDto);
+
+        log.debug("Processed artwork DTO: {}", artworkDto);
         return artworkDto;
+    }
+
+    private static BigDecimal parseBigDecimal(String value) {
+        if (Objects.equals(value, "") || value == null) {
+            return BigDecimal.ZERO;
+        }
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            log.warn("Invalid BigDecimal value provided: '{}'. Defaulting to 0.", value);
+            return BigDecimal.ZERO;
+        }
     }
 }

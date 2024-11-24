@@ -78,6 +78,7 @@ public class CommandFactory implements Closeable {
     private final List<Closeable> closeables;
 
     private CommandFactory() {
+        log.info("Initializing CommandFactory...");
         DataSource dataSource = getDataSource();
         closeables = new ArrayList<>();
         closeables.add(dataSource);
@@ -132,21 +133,27 @@ public class CommandFactory implements Closeable {
         controllers.put("delete_artwork", new DeleteArtworkCommand(artworkService));
         controllers.put("edit_artwork", new EditArtworkCommand(artistService, artworkService));
         controllers.put("edit_artwork_form", new EditArtworkFormCommand(artistService, artworkService));
+        log.info("CommandFactory initialization complete.");
     }
 
     private static DataSource getDataSource() {
+        log.info("Fetching data source configuration...");
         PropertiesManager propertiesManager = new PropertiesManagerImpl("/app.properties");
         String profile = propertiesManager.getKey("my.app.profile");
         String url = propertiesManager.getKey("my.app.db." + profile + ".url");
         String user = propertiesManager.getKey("my.app.db." + profile + ".user");
         String password = propertiesManager.getKey("my.app.db." + profile + ".password");
         String driver = propertiesManager.getKey("my.app.db." + profile + ".driver");
+
+        log.debug("Database configuration loaded. URL: {}, User: {}", url, user);
         return new DataSourceImpl(password, user, url, driver);
     }
 
     public Command get(String command) {
+        log.debug("Fetching controller for command: {}", command);
         Command controller = controllers.get(command);
         if (controller == null) {
+            log.warn("Command '{}' not found, returning error controller.", command);
             return controllers.get("error");
         }
         return controller;
@@ -154,12 +161,15 @@ public class CommandFactory implements Closeable {
 
     @Override
     public void close() {
+        log.info("Closing resources...");
         for (Closeable closeable : closeables) {
             try {
                 closeable.close();
+                log.debug("Closed resource: {}", closeable.getClass().getSimpleName());
             } catch (IOException e) {
-                log.error(e.getMessage(), e);
+                log.error("Error closing resource: {}", closeable.getClass().getSimpleName(), e);
             }
         }
+        log.info("Resources closed successfully.");
     }
 }

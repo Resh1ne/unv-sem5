@@ -8,9 +8,11 @@ import by.bsuir.pbz2.service.dto.ExhibitionDto;
 import by.bsuir.pbz2.service.dto.ExhibitionHallDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDate;
 
+@Log4j2
 @RequiredArgsConstructor
 public class EditExhibitionCommand implements Command {
     private final ExhibitionService exhibitionService;
@@ -20,9 +22,13 @@ public class EditExhibitionCommand implements Command {
     public String execute(HttpServletRequest req) {
         ExhibitionDto exhibitionDto = process(req, exhibitionHallService);
 
-        ExhibitionDto exhibitionDtoCreated = exhibitionService.update(exhibitionDto);
+        log.info("Attempting to update exhibition with ID: {}", exhibitionDto.getId());
 
-        req.setAttribute("exhibition", exhibitionDtoCreated);
+        ExhibitionDto exhibitionDtoUpdated = exhibitionService.update(exhibitionDto);
+
+        log.info("Exhibition with ID: {} updated successfully", exhibitionDtoUpdated.getId());
+
+        req.setAttribute("exhibition", exhibitionDtoUpdated);
         return "jsp/exhibition/exhibition.jsp";
     }
 
@@ -33,6 +39,7 @@ public class EditExhibitionCommand implements Command {
         String type = req.getParameter("type");
         String startDate = req.getParameter("start_date");
         String endDate = req.getParameter("end_date");
+
         ExhibitionDto exhibitionDto = new ExhibitionDto();
         exhibitionDto.setId(id);
         exhibitionDto.setName(name);
@@ -40,6 +47,7 @@ public class EditExhibitionCommand implements Command {
         exhibitionDto.setType(ExhibitionType.valueOf(type));
         exhibitionDto.setStartDate(LocalDate.parse(startDate));
         exhibitionDto.setEndDate(LocalDate.parse(endDate));
+
         return exhibitionDto;
     }
 }
