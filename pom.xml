@@ -63,10 +63,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
-                <configuration>
-                    <warName>pbz</warName>
-                    <outputDirectory>${env.CATALINA_HOME}/webapps</outputDirectory>
-                </configuration>
+<!--                <configuration>-->
+<!--                    <warName>pbz</warName>-->
+<!--                    <outputDirectory>${env.CATALINA_HOME}/webapps</outputDirectory>-->
+<!--                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
