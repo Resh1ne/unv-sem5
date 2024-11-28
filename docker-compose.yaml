@@ -9,7 +9,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - "//c/Users/Daniil/IdeaProjects/unv-sem5/SQL/scriptForCreatingTable.sql:/docker-entrypoint-initdb.d/scriptForCreatingTable.sql"
+      - "//c/Users/User/IdeaProjects/unv-sem5/SQL/scriptForCreatingTable.sql:/docker-entrypoint-initdb.d/scriptForCreatingTable.sql"
 
 
   app:
