@@ -1,4 +1,5 @@
 # Индивидуальная практическая работа 1 по дисциплине ЛОИС
+# Вариант 4
 # Выполнена студентом группы 221702 БГУИР Потоцкий Даниил Александрович
 # Основные методы для нахождения обратного нечёткого вывода
 # Последние изменения: 02.12.2024, версия: 1
@@ -243,7 +244,7 @@ def find_reverse_inference(file_name: str):
         y = set_.elements[i].val
         get_solutions(matrix, i, y, intervals, solutions)
 
-    # print(solutions)
+    print(solutions)
     # print(intervals)
     possible_results = cartesian_product(copy.deepcopy(intervals))
     # print(possible_results)
@@ -252,7 +253,7 @@ def find_reverse_inference(file_name: str):
     for pos_res in possible_results:
         if is_solution(pos_res, solutions, matrix):
             res.add(tuple(pos_res))
-
+    print(res)
     res_list: List[List[Interval]] = [list(t) for t in res]
     clear_intervals(res_list)
 
