@@ -8,7 +8,7 @@
 # Логические основы интеллектуальных систем. Практикум: учебно-методическое пособие / В.В.Голенков, В.П.Ивашенко, Д.Г.Колб, К.А.Уваров. – Минск: БГУИР, 2011.
 
 from parsing import Matrix, parse_str, PRECISION
-from typing import List, Set, Tuple, Generator
+from typing import List, Set, Tuple, Generator, Optional
 import copy
 import itertools
 
@@ -45,10 +45,10 @@ class Interval:
 
 
 def get_solutions_1(
-    i: int,
-    matrix: Matrix,
-    new_solutions: EquationSolutions,
-    intervals: List[List[Interval]],
+        i: int,
+        matrix: Matrix,
+        new_solutions: EquationSolutions,
+        intervals: List[List[Interval]],
 ):
     solution = []
     for j in range(matrix.eq_size()):
@@ -64,10 +64,10 @@ def get_solutions_1(
 
 
 def get_solutions_0(
-    i: int,
-    matrix: Matrix,
-    new_solutions: EquationSolutions,
-    intervals: List[List[Interval]],
+        i: int,
+        matrix: Matrix,
+        new_solutions: EquationSolutions,
+        intervals: List[List[Interval]],
 ):
     for j in range(matrix.eq_size()):
         el = matrix[i][j]
@@ -91,11 +91,11 @@ def get_solutions_0(
 
 
 def get_solutions_y(
-    i: int,
-    y: int,
-    matrix: Matrix,
-    new_solutions: EquationSolutions,
-    intervals: List[List[Interval]],
+        i: int,
+        y: int,
+        matrix: Matrix,
+        new_solutions: EquationSolutions,
+        intervals: List[List[Interval]],
 ):
     for j in range(matrix.eq_size()):
         el = matrix[i][j]
@@ -131,11 +131,11 @@ def get_solutions_y(
 
 
 def get_solutions(
-    matrix: Matrix,
-    i: int,
-    y: int,
-    intervals: List[List[Interval]],
-    solutions: List[EquationSolutions],
+        matrix: Matrix,
+        i: int,
+        y: int,
+        intervals: List[List[Interval]],
+        solutions: List[EquationSolutions],
 ):
     new_solutions = EquationSolutions()
     if y == 0:
@@ -149,7 +149,7 @@ def get_solutions(
 
 
 def cartesian_product(
-    sets: List[List[Interval]],
+        sets: List[List[Interval]],
 ) -> Generator[List[Interval], None, None]:
     return (list(comb) for comb in itertools.product(*sets))
 
@@ -161,17 +161,41 @@ def in_interval(outer: Interval, inner: Interval) -> bool:
     return outer.start <= inner.start and outer.end >= inner.end
 
 
+def in_interval_shorten(outer: Interval, inner: Interval) -> Optional[Interval]:
+    if not outer.is_defined() or not inner.is_defined():
+        return None
+
+    start = max(outer.start, inner.start)
+    end = min(outer.end, inner.end)
+
+    if start < end:
+        return Interval(start, end)
+    else:
+        return None
+
+
 def is_solution_eq(
-    pos_res: List[Interval], eq_solutions: EquationSolutions, matrix: Matrix
+        pos_res: List[Interval],
+        interval_sets: List[Set[Interval]],
+        eq_solutions: EquationSolutions,
+        matrix: Matrix,
+        new_solutions: List[List[Interval]]
 ):
     for solution in eq_solutions:
         all = True
         for j in range(matrix.eq_size()):
-            if solution[j] == Interval():  # made a break
+            if solution[j] == Interval():
                 all = False
                 break
 
             if not in_interval(solution[j], pos_res[j]):
+                res = in_interval_shorten(solution[j], pos_res[j])
+                if res is not None:
+                    if res not in interval_sets[j]:
+                        new_pos_res = pos_res.copy()
+                        new_pos_res[j] = res
+                        new_solutions.append(new_pos_res)
+
                 all = False
                 break
 
@@ -182,10 +206,16 @@ def is_solution_eq(
 
 
 def is_solution(
-    pos_res: List[Interval], solutions: List[EquationSolutions], matrix: Matrix
+        pos_res: List[Interval],
+        interval_sets: List[Set[Interval]],
+        solutions: List[EquationSolutions],
+        matrix: Matrix,
+        new_solutions: List[List[Interval]]
 ):
     for eq_solutions in solutions:
-        if not is_solution_eq(pos_res, eq_solutions, matrix):
+        if not is_solution_eq(
+                pos_res, interval_sets, eq_solutions, matrix, new_solutions
+        ):
             return False
 
     return True
@@ -244,16 +274,21 @@ def find_reverse_inference(file_name: str):
         y = set_.elements[i].val
         get_solutions(matrix, i, y, intervals, solutions)
 
-    print(solutions)
+    # print(solutions)
     # print(intervals)
     possible_results = cartesian_product(copy.deepcopy(intervals))
     # print(possible_results)
     res: Set[Tuple[Interval, ...]] = set()
-    # res: List[List[Interval]] = []
+    new_solutions: List[List[Interval]] = []
+    interval_sets = [set(interval) for interval in intervals]
     for pos_res in possible_results:
-        if is_solution(pos_res, solutions, matrix):
+        if is_solution(pos_res, interval_sets, solutions, matrix, new_solutions):
             res.add(tuple(pos_res))
-    print(res)
+
+    for pos_res in new_solutions:
+        if is_solution(pos_res, interval_sets, solutions, matrix, new_solutions):
+            res.add(tuple(pos_res))
+
     res_list: List[List[Interval]] = [list(t) for t in res]
     clear_intervals(res_list)
 
